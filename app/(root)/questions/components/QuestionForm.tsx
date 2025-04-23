@@ -66,7 +66,7 @@ const QuestionForm = () => {
 				{error && <p className="text-sm text-red-500">{error}</p>}
 				<div className="space-x-2">
 					{tags.map((tag, index) => (
-						<TagCard key={index} href="/?filters=nextjs">
+						<TagCard key={index} href={`/tags/${tag}`}>
 							{tag}
 						</TagCard>
 					))}
