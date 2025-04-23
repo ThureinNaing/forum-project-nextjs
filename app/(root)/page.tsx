@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Filters from "@/components/Filters";
 import ThreadCard from "@/components/ThreadCard";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ export default async function Home({
 		filter: string | undefined;
 	}>;
 }) {
-	// const { search, filter } = await searchParams;
+	const { search, filter } = await searchParams;
 
 	return (
 		<div className="p-5 space-y-5">
