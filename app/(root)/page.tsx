@@ -12,7 +12,7 @@ export default async function Home({
 		filter: string | undefined;
 	}>;
 }) {
-	const { search, filter } = await searchParams;
+	// const { search, filter } = await searchParams;
 
 	return (
 		<div className="p-5 space-y-5">
