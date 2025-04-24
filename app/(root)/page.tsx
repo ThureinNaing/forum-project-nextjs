@@ -14,6 +14,7 @@ export default async function Home({
 	}>;
 }) {
 	const { search, filter } = await searchParams;
+	console.log({ search, filter });
 
 	return (
 		<div className="p-5 space-y-5">
