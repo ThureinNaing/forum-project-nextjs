@@ -9,7 +9,7 @@ import SearchInput from "./SearchInput";
 
 const Navbar = async () => {
 	return (
-		<nav className="flex justify-between items-center md:px-5  py-4">
+		<nav className="flex justify-between items-center mx-3 md:mx-0 md:px-5  py-4">
 			<div className="font-bold flex items-center justify-center cursor-pointer">
 				<div className="flex  justify-between items-center gap-2 md:gap-5">
 					<SidebarTrigger className="cursor-pointer" />

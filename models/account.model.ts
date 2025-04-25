@@ -29,6 +29,7 @@ const AccountSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		//store the token from github or google
 		providerAccountId: {
 			type: String,
 			required: true,

@@ -6,7 +6,7 @@ export interface ICollection {
 }
 
 export interface ICollectionDocument extends ICollection, Document {}
-
+//for  bookmarked questions
 const CollectionSchema = new Schema(
 	{
 		author: {
@@ -24,7 +24,7 @@ const CollectionSchema = new Schema(
 		timestamps: true,
 	}
 );
-//a user can't have the same question in their collection more than once
+//a user can't have the same question in their bookmark more than once
 CollectionSchema.index({ author: 1, question: 1 }, { unique: true });
 
 const Collection =

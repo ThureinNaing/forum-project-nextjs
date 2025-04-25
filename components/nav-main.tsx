@@ -35,7 +35,7 @@ export function NavMain({
 	return (
 		<SidebarGroup>
 			<SidebarGroupLabel>Platform</SidebarGroupLabel>
-			<SidebarMenu>
+			<SidebarMenu className="space-y-3">
 				{items.map((item) => (
 					<Collapsible
 						key={item.title}
@@ -47,6 +47,7 @@ export function NavMain({
 							<CollapsibleTrigger asChild>
 								<SidebarMenuButton
 									tooltip={item.title}
+									size={"lg"}
 									className="[&>svg]:size-6 group-data-[collapsible=icon]:[&>svg]:ml-1"
 								>
 									{item.icon && <item.icon />}

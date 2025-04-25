@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import { handleErrorResponse, handleSuccessResponse } from "@/lib/response";
-import UserSchema from "@/lib/Schema/UserSchema";
+import { UserSchema } from "@/lib/Schema";
+
 import validateBody from "@/lib/validateBody";
 import User from "@/models/user.model";
 
@@ -9,7 +10,7 @@ export async function GET() {
 		await dbConnect();
 		const users = await User.find();
 		return handleSuccessResponse(users);
-	} catch (err) {
+	} catch (err: unknown) {
 		return handleErrorResponse(err);
 	}
 }
