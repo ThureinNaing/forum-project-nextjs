@@ -4,6 +4,7 @@ import ThreadCard from "@/components/ThreadCard";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/routes";
 import Link from "next/link";
+import { threadCardData } from "../../constants/index";
 
 export default async function Home({
 	searchParams,
@@ -30,9 +31,14 @@ export default async function Home({
 				</Button>
 			</div>
 			<Filters />
-			<ThreadCard />
-			<ThreadCard />
-			<ThreadCard />
+			{threadCardData.map((threadCardData) => (
+				<ThreadCard
+					key={threadCardData.id}
+					threadCardData={threadCardData}
+				/>
+			))}
+			{/* <ThreadCard /> */}
+			{/* <ThreadCard /> */}
 		</div>
 	);
 }
