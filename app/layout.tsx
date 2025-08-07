@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import React from "react";
@@ -9,15 +9,15 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import ClientToast from "@/components/client-toast";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
+// const geistSans = Geist({
+// 	variable: "--font-geist-sans",
+// 	subsets: ["latin"],
+// });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
+// const geistMono = Geist_Mono({
+// 	variable: "--font-geist-mono",
+// 	subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
 	title: "Forum",
@@ -33,9 +33,10 @@ export default async function RootLayout({
 	return (
 		//bg-[#05061B]
 		<html lang="en" suppressHydrationWarning>
-			<body
+			{/* <body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-			>
+			> */}
+			<body className={` antialiased`}>
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import ROUTES from "@/routes";
 import Link from "next/link";
 import { threadCardData } from "../../constants/index";
+import fetchHandler from "@/lib/fetchHandler";
 
 export default async function Home({
 	searchParams,
@@ -16,7 +17,8 @@ export default async function Home({
 }) {
 	const { search, filter } = await searchParams;
 	console.log({ search, filter });
-
+	const response = await fetchHandler("http://localhost:3000/api/users");
+	console.log("users", response);
 	return (
 		<div className="p-5 space-y-5">
 			<div className="flex items-center justify-between">
