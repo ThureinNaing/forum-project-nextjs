@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import { handleErrorResponse, handleSuccessResponse } from "@/lib/response";
-import { UserSchema } from "@/lib/Schema";
+import { UserSchema } from "@/lib/Schema/UserSchema";
 
 import validateBody from "@/lib/validateBody";
 import User from "@/models/user.model";

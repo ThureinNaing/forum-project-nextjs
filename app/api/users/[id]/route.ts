@@ -2,7 +2,7 @@ import { handleErrorResponse, handleSuccessResponse } from "@/lib/response";
 import User from "@/models/user.model";
 import { Types } from "mongoose";
 import validateBody from "@/lib/validateBody";
-import { UserSchema } from "@/lib/Schema";
+import { UserSchema } from "@/lib/Schema/UserSchema";
 
 //get user by id
 export async function GET(

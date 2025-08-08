@@ -2,7 +2,7 @@ import { handleErrorResponse, handleSuccessResponse } from "@/lib/response";
 import Account from "@/models/account.model";
 import { Types } from "mongoose";
 import validateBody from "@/lib/validateBody";
-import { AccountSchema } from "@/lib/Schema";
+import { AccountSchema } from "@/lib/Schema/AccountSchema";
 
 // Get account by id
 export async function GET(
