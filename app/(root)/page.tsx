@@ -7,6 +7,7 @@ import Link from "next/link";
 import { threadCardData } from "../../constants/index";
 import fetchHandler from "@/lib/fetchHandler";
 import { api } from "@/lib/api";
+import { auth } from "@/auth";
 
 export default async function Home({
 	searchParams,
@@ -20,6 +21,8 @@ export default async function Home({
 	console.log({ search, filter });
 	// const response = await api.users.getAll();
 	// console.log("Response from API:", response);
+	const session = await auth();
+	console.log("user session:", session?.user);
 
 	return (
 		<div className="p-5 space-y-5">
