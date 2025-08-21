@@ -6,6 +6,7 @@ import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
 import ROUTES from "@/routes";
 import SearchInput from "./SearchInput";
+import { SignOut } from "./signout-btn";
 
 const Navbar = async () => {
 	return (
@@ -33,6 +34,9 @@ const Navbar = async () => {
 				<Link href={ROUTES.LOGIN} className="text-sm text-blue-500">
 					Login
 				</Link>
+
+				{<SignOut />}
+
 				<ModeToggle />
 			</div>
 		</nav>

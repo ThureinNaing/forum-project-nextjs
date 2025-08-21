@@ -25,5 +25,23 @@ const handleErrorResponse = (err: unknown) => {
 		{ status }
 	);
 };
+const handleActionErrorResponse = (err: unknown) => {
+	let message = err instanceof Error ? err.message : "Internal Server Error";
+	let details = null;
+	//handle validation error with zod
+	if (err instanceof ZodError) {
+		details = err.flatten().fieldErrors;
+		message = "Validation Error";
+	}
+	return {
+		message,
+		success: false,
+		details,
+	};
+};
 
-export { handleSuccessResponse, handleErrorResponse };
+export {
+	handleSuccessResponse,
+	handleErrorResponse,
+	handleActionErrorResponse,
+};
