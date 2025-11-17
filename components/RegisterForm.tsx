@@ -71,7 +71,7 @@ const RegisterForm = () => {
 									/>
 								</FormControl>
 
-								<FormMessage />
+								<FormMessage className="text-red-500" />
 							</FormItem>
 						)}
 					/>
@@ -88,15 +88,12 @@ const RegisterForm = () => {
 									/>
 								</FormControl>
 
-								<FormMessage>
-									{error &&
-										error ===
-											"Username already exists!" && (
-											<p className="text-red-500">
-												{error}
-											</p>
-										)}
-								</FormMessage>
+								{error &&
+									error === "Username already exists!" && (
+										<FormMessage className="text-red-500">
+											{error}
+										</FormMessage>
+									)}
 							</FormItem>
 						)}
 					/>
@@ -113,14 +110,11 @@ const RegisterForm = () => {
 									/>
 								</FormControl>
 
-								<FormMessage>
-									{error &&
-										error === "Email already exists!" && (
-											<p className="text-red-500">
-												{error}
-											</p>
-										)}
-								</FormMessage>
+								{error && error === "Email already exists!" && (
+									<FormMessage className="text-red-500">
+										{error}
+									</FormMessage>
+								)}
 							</FormItem>
 						)}
 					/>
@@ -137,7 +131,7 @@ const RegisterForm = () => {
 									/>
 								</FormControl>
 
-								<FormMessage />
+								<FormMessage className="text-red-500" />
 							</FormItem>
 						)}
 					/>
@@ -154,7 +148,7 @@ const RegisterForm = () => {
 									/>
 								</FormControl>
 
-								<FormMessage />
+								<FormMessage className="text-red-500" />
 							</FormItem>
 						)}
 					/>

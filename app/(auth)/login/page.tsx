@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -17,8 +17,12 @@ import { loginSchema } from "@/schema";
 import Link from "next/link";
 import AuthForm from "../components/authForm";
 import ROUTES from "@/routes";
+import { signInWithCredentials } from "@/lib/actions/SignInWithCredentials.actions";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+	const [error, setError] = useState<string | null>(null);
+	const router = useRouter();
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
@@ -28,8 +32,17 @@ const Login = () => {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof loginSchema>) {
+	async function onSubmit(values: z.infer<typeof loginSchema>) {
 		console.log(values);
+		const res = await signInWithCredentials(values);
+		console.log("res", res);
+		if (res.success) {
+			router.push(ROUTES.HOME);
+		} else {
+			if ("message" in res && res.message) {
+				setError(res.message);
+			}
+		}
 	}
 	return (
 		<div className="p-10  min-h-screen flex flex-col items-center justify-center">
@@ -52,7 +65,7 @@ const Login = () => {
 									/>
 								</FormControl>
 
-								<FormMessage />
+								<FormMessage className="text-red-500" />
 							</FormItem>
 						)}
 					/>
@@ -69,7 +82,14 @@ const Login = () => {
 									/>
 								</FormControl>
 
-								<FormMessage />
+								<FormMessage className="text-red-500" />
+								{error &&
+									error !==
+										"Password must be at least 8 character" && (
+										<FormMessage className="text-red-500">
+											{error}
+										</FormMessage>
+									)}
 							</FormItem>
 						)}
 					/>

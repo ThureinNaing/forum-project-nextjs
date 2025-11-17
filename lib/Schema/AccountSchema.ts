@@ -9,7 +9,7 @@ export const AccountSchema = z.object({
 	image: z.string().url({ message: "Please provide a valid URL" }).optional(),
 	password: z
 		.string()
-		.min(6, { message: "Password must be at least 6 characters" })
+		.min(8, { message: "Password must be at least 8 characters" })
 		.optional(),
 	provider: z.string().min(1, { message: "Provider is required" }),
 	providerAccountId: z

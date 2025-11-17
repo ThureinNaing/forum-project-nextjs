@@ -36,7 +36,7 @@ export default async function RootLayout({
 			{/* <body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			> */}
-			<body className={` antialiased`}>
+			<body className={` antialiased`} cz-shortcut-listen="true">
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
