@@ -39,7 +39,7 @@ const RegisterForm = () => {
 
 	async function onSubmit(values: z.infer<typeof registerSchema>) {
 		const res = await signUpWithCredentials(values);
-		console.log("res", res);
+
 		if (res.success) {
 			router.push(ROUTES.HOME);
 		} else {

@@ -4,14 +4,20 @@ import TagCard from "@/components/TagCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CreateQuestionAction } from "@/lib/actions/CreateQuestion.actions";
+import ROUTES from "@/routes";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const QuestionForm = () => {
-	const [value, setValue] = useState("");
+	const [content, setContent] = useState("");
 	const [title, setTitle] = useState("");
-	const [tags, setTags] = useState<string[]>(["NextJs", "React"]);
+	const [tags, setTags] = useState<string[]>([]);
 	const [newTag, setNewTag] = useState("");
 	const [error, setError] = useState("");
+	const router = useRouter();
+
 	const enterPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
 			const lowerCaseTags = tags.map((tag) => tag.toLowerCase().trim());
@@ -24,9 +30,31 @@ const QuestionForm = () => {
 			}
 		}
 	};
+	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		try {
+			const res = await CreateQuestionAction({
+				title,
+				content,
+				tags,
+			});
+
+			if (res.success && res.data) {
+				toast.success("Question created successfully!");
+				router.push(ROUTES.Question_Details(res.data!._id));
+			}
+		} catch (err) {
+			if (err instanceof Error) {
+				toast.error(err.message);
+				console.error(err.message);
+			}
+		}
+	};
 	return (
-		<div className="space-y-5">
+		<form className="space-y-5" onSubmit={submit}>
 			<h1 className="text-2xl font-bold">Ask A New Question?</h1>
+
 			<div className="space-y-2">
 				<Label htmlFor="title" className="font-semibold p-2">
 					Title
@@ -38,15 +66,18 @@ const QuestionForm = () => {
 					id="title"
 					className="bg-gray-200 dark:bg-[#081338]"
 				/>
-				<p className="text-muted-foreground text-sm">
-					Describe you questin title in short way
-				</p>
+				{!error && (
+					<p className="text-muted-foreground text-sm">
+						Describe you questin title in short way
+					</p>
+				)}
+				{error && <p className="text-sm text-red-500">{error}</p>}
 			</div>
 			{/* editor component */}
 			<Editor
 				label="Any question?"
-				value={value}
-				onChange={(v: string) => setValue(v)}
+				value={content}
+				onChange={(v: string) => setContent(v)}
 			/>
 			<div className="space-y-2">
 				<Label htmlFor="tags" className="font-semibold p-2">
@@ -72,10 +103,13 @@ const QuestionForm = () => {
 					))}
 				</div>
 			</div>
-			<Button className="w-full bg-gray-500 hover:bg-gray-600 dark:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer">
+			<Button
+				type="submit"
+				className="w-full bg-gray-500 hover:bg-gray-600 dark:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer"
+			>
 				Create
 			</Button>
-		</div>
+		</form>
 	);
 };
 

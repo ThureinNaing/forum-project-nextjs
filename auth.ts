@@ -22,7 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					const { email, password } = validationFields.data;
 
 					const { data: existingAccount } =
-						await api.accounts.getByProvider(email);
+						await api.accounts?.getByProvider(email);
 
 					if (!existingAccount) return null;
 
@@ -30,7 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 						existingAccount.userId.toString()
 					);
 
-					if (!existingAccount) return null;
+					if (!existingUser) return null;
 
 					const isValidPassowrd = await bcrypt.compare(
 						password,

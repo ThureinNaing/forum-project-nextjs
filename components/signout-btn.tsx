@@ -1,11 +1,21 @@
-"use client";
-import { signOut } from "next-auth/react";
+"use server";
+import { signOut } from "@/auth";
 import { Button } from "./ui/button";
+import { redirect } from "next/navigation";
+import ROUTES from "@/routes";
 
-export function SignOut() {
+export async function SignOut() {
 	return (
-		<Button variant={"destructive"} onClick={() => signOut()}>
-			Sign Out
-		</Button>
+		<form
+			action={async () => {
+				"use server";
+				await signOut({ redirect: false });
+				return redirect(ROUTES.LOGIN);
+			}}
+		>
+			<Button variant={"destructive"} type="submit">
+				Sign Out
+			</Button>
+		</form>
 	);
 }

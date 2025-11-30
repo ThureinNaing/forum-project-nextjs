@@ -1,3 +1,4 @@
+"use server";
 import QuestionForm from "../components/QuestionForm";
 
 const page = () => {
