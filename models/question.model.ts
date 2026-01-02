@@ -8,7 +8,7 @@ export interface IQuestion {
 	upvotes: number;
 	downvotes: number;
 	answers: number;
-	author: string;
+	author: Types.ObjectId;
 }
 
 export interface IQuestionDocument extends IQuestion, Document {}
@@ -47,7 +47,7 @@ const QuestionSchema = new Schema(
 			default: 0,
 		},
 		author: {
-			type: String,
+			type: Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
 		},

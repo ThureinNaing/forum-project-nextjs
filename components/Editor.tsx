@@ -48,6 +48,7 @@ const Editor = ({
 				class: "prose prose-invert max-w-none my-2 p-2 rounded-lg min-h-[300px] border-2 bg-gray-200 dark:bg-[#081338] text-black dark:text-white ",
 			},
 		},
+		immediatelyRender: false,
 		extensions: [
 			StarterKit,
 			Bold,

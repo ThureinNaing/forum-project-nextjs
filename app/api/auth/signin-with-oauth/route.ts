@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dbConnect from "@/lib/dbConnect";
 import slugify from "slugify";
-import { handleSuccessResponse } from "@/lib/response";
+import { handleErrorResponse, handleSuccessResponse } from "@/lib/response";
 import SigninWithOAuthSchema from "@/lib/Schema/SigninWithOAuthSchema";
 import validateBody from "@/lib/validateBody";
 import Account from "@/models/account.model";
@@ -26,6 +26,7 @@ export async function POST(request: Request) {
 			[existingUser] = await User.create(
 				[
 					{
+						// _id: new mongoose.Types.ObjectId().toString(),
 						email,
 						name,
 						username: slugify(username, {
@@ -75,8 +76,11 @@ export async function POST(request: Request) {
 
 		return handleSuccessResponse({ existingUser });
 	} catch (error: unknown) {
-		console.log(error);
-		await session.abortTransaction(); // rollback to previous state
+		if (session.inTransaction()) {
+			await session.abortTransaction(); // rollback to previous state on error
+		}
+
+		return handleErrorResponse(error);
 	} finally {
 		session.endSession();
 	}

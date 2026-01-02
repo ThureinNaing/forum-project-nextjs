@@ -81,6 +81,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					);
 				if (!success || !accountData) return token;
 				const userId = accountData.id;
+
 				if (userId) token.sub = userId;
 			}
 			return token;

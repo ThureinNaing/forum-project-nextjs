@@ -1,4 +1,5 @@
 import mongoose, { Mongoose } from "mongoose";
+import "@/models/index";
 declare global {
 	// eslint-disable-next-line no-var
 	var mongoose: {
@@ -7,6 +8,13 @@ declare global {
 	}; // This must be a `var` and not a `let / const`
 }
 
+// if (!mongoose.models.image) {
+// 	// _id ကို String အဖြစ် အတင်းသတ်မှတ်ပေးလိုက်ခြင်းဖြင့် Cast Error ကို ကျော်လွှားမယ်
+// 	mongoose.model(
+// 		"image",
+// 		new mongoose.Schema({ _id: String }, { strict: false })
+// 	);
+// }
 let cached = global.mongoose;
 
 if (!cached) {

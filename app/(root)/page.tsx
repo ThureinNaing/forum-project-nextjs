@@ -1,28 +1,31 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Filters from "@/components/Filters";
 import ThreadCard from "@/components/ThreadCard";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/routes";
 import Link from "next/link";
-import { threadCardData } from "../../constants/index";
-import fetchHandler from "@/lib/fetchHandler";
-import { api } from "@/lib/api";
-import { auth } from "@/auth";
+import { GetAllQuestions } from "@/lib/actions/GetAllQuestions.actions";
 
 export default async function Home({
 	searchParams,
 }: {
 	searchParams: Promise<{
-		search: string | undefined;
-		filter: string | undefined;
+		// search: string | undefined;
+		// filter: string | undefined;
+		[key: string]: string; //don't need to specify exact keys
 	}>;
 }) {
-	const { search, filter } = await searchParams;
-	console.log({ search, filter });
-	// const response = await api.users.getAll();
-	// console.log("Response from API:", response);
-	const session = await auth();
-	console.log("user session:", session?.user);
+	const { page, pageSize, search, filter } = await searchParams;
+
+	const { success, data, message } = await GetAllQuestions({
+		page: Number(page) || 1,
+		pageSize: Number(pageSize) || 10,
+		search: search || "",
+		filter: filter || "",
+	});
+
+	// const user = await auth();
+
+	const { questions } = data || {};
 
 	return (
 		<div className="p-5 space-y-5">
@@ -38,14 +41,17 @@ export default async function Home({
 				</Button>
 			</div>
 			<Filters />
-			{threadCardData.map((threadCardData) => (
-				<ThreadCard
-					key={threadCardData.id}
-					threadCardData={threadCardData}
-				/>
-			))}
-			{/* <ThreadCard /> */}
-			{/* <ThreadCard /> */}
+			{success && data ? (
+				questions?.length ? (
+					questions?.map((question, index) => (
+						<ThreadCard question={question} key={index} />
+					))
+				) : (
+					<p>No result found</p>
+				)
+			) : (
+				<p>{message}</p>
+			)}
 		</div>
 	);
 }

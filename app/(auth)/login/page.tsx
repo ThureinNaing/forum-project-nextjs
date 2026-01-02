@@ -33,9 +33,8 @@ const Login = () => {
 	});
 
 	async function onSubmit(values: z.infer<typeof loginSchema>) {
-		console.log(values);
 		const res = await signInWithCredentials(values);
-		console.log("res", res);
+
 		if (res.success) {
 			router.push(ROUTES.HOME);
 		} else {

@@ -4,6 +4,6 @@ const ROUTES = {
 	REGISTRATION: "/register",
 	QUESTIONS: "/questions",
 	QUESTION_CREATE: "/questions/create",
-	Question_Details: (id: string) => "/questions/" + id,
+	QUESTION_DETAILS: (id: string) => "/questions/" + id,
 };
 export default ROUTES;

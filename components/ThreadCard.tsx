@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
 	Card,
 	CardContent,
@@ -10,40 +9,39 @@ import {
 import { Eye, MessageCircle, ThumbsUp, User } from "lucide-react";
 
 import TagCard from "./TagCard";
-import { threadCardDataType } from "@/types";
+import { IQuestionDocument } from "../models/question.model";
 
-interface CardComponentProps {
-	threadCardData: threadCardDataType;
-}
-const ThreadCard = ({ threadCardData }: CardComponentProps) => {
+const ThreadCard = ({ question }: { question: IQuestionDocument }) => {
 	return (
 		<Card className="bg-gray-200 dark:bg-[#081338] shadow-md dark:shadow-blue-900">
 			<CardHeader>
-				<CardTitle>{threadCardData?.title}</CardTitle>
+				<CardTitle>{question?.title}</CardTitle>
 			</CardHeader>
 			<CardContent className="space-x-2">
-				{threadCardData?.tag?.map((tag) => (
-					<TagCard href={`/?filter=${tag.toLowerCase()}`} key={tag}>
-						{tag}
+				{question?.tags?.map((tag, index) => (
+					<TagCard
+						href={`/filter/${tag.name.toLowerCase()}`}
+						key={index}
+					>
+						{tag.name}
 					</TagCard>
 				))}
 			</CardContent>
 			<CardFooter className="flex justify-between items-center">
 				<div className="flex justify-between items-center gap-3">
 					<User />
-					<span>User, asked {threadCardData.time}</span>
+					<span>{question?.author?.name}, asked 3 mins ago</span>
 				</div>
 				<div className="flex justify-between items-center gap-5 text-sm">
-					<div className="flex justify-between items-center gap-1">
-						<ThumbsUp size={16} />{" "}
-						<span>{threadCardData.like}</span>
+					<div className="flex justify-between items-center gap-1 cursor-pointer">
+						<ThumbsUp size={16} /> <span>{question.upvotes}</span>
 					</div>
-					<div className="flex justify-between items-center gap-1">
+					<div className="flex justify-between items-center gap-1 cursor-pointer">
 						<MessageCircle size={16} />
-						{/* <span>{threadCardData.answer}</span> */}
+						<span>{question.answers}</span>
 					</div>
-					<div className="flex justify-between items-center gap-1">
-						<Eye size={16} /> <span>{threadCardData.view}</span>
+					<div className="flex justify-between items-center gap-1 cursor-pointer">
+						<Eye size={16} /> <span>{question.views}</span>
 					</div>
 				</div>
 			</CardFooter>

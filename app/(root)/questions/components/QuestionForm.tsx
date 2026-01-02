@@ -1,19 +1,31 @@
 "use client";
+
 import Editor from "@/components/Editor";
-import TagCard from "@/components/TagCard";
+import RemovableTagCard from "@/components/RemovableTagCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CreateQuestionAction } from "@/lib/actions/CreateQuestion.actions";
+import { QuestionEdit } from "@/lib/actions/QuestionEdit.actions";
+
+import { IQuestion } from "@/models/question.model";
 import ROUTES from "@/routes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const QuestionForm = () => {
-	const [content, setContent] = useState("");
-	const [title, setTitle] = useState("");
-	const [tags, setTags] = useState<string[]>([]);
+const QuestionForm = ({
+	question,
+	isEdit = false,
+}: {
+	question?: IQuestion;
+	isEdit?: boolean;
+}) => {
+	const [title, setTitle] = useState(question?.title ?? "");
+	const [content, setContent] = useState(question?.content ?? "");
+	const [tags, setTags] = useState<string[]>(
+		question?.tags?.map((tag) => tag.name) ?? []
+	);
 	const [newTag, setNewTag] = useState("");
 	const [error, setError] = useState("");
 	const router = useRouter();
@@ -34,22 +46,45 @@ const QuestionForm = () => {
 		e.preventDefault();
 
 		try {
-			const res = await CreateQuestionAction({
+			if (isEdit && question) {
+				const res = await QuestionEdit({
+					questionId: question._id as string,
+					title,
+					content,
+					tags,
+				});
+
+				if (res.success) {
+					toast.success("Question updated successfully!");
+					router.push(ROUTES.QUESTION_DETAILS(res.data!._id));
+				}
+				return;
+			}
+
+			const result = await CreateQuestionAction({
 				title,
 				content,
 				tags,
 			});
 
-			if (res.success && res.data) {
+			if (result.success && result.data) {
 				toast.success("Question created successfully!");
-				router.push(ROUTES.Question_Details(res.data!._id));
+				return router.push(ROUTES.QUESTION_DETAILS(result.data?._id));
+			} else {
+				toast.error(
+					result.data?.toString() || "Failed to create question"
+				);
 			}
 		} catch (err) {
 			if (err instanceof Error) {
 				toast.error(err.message);
-				console.error(err.message);
 			}
 		}
+	};
+
+	const removeTag = (tagToRemove: string) => {
+		const filteredTags = tags.filter((tag) => tag !== tagToRemove);
+		setTags(filteredTags);
 	};
 	return (
 		<form className="space-y-5" onSubmit={submit}>
@@ -71,7 +106,7 @@ const QuestionForm = () => {
 						Describe you questin title in short way
 					</p>
 				)}
-				{error && <p className="text-sm text-red-500">{error}</p>}
+				{/* {error && <p className="text-sm text-red-500">{error}</p>} */}
 			</div>
 			{/* editor component */}
 			<Editor
@@ -91,15 +126,20 @@ const QuestionForm = () => {
 					id="tags"
 					className="bg-gray-200 dark:bg-[#081338]"
 				/>
-				<p className="text-muted-foreground text-sm">
-					Please press enter to add tags
-				</p>
+				{!error && (
+					<p className="text-muted-foreground text-sm">
+						Please press enter to add tags
+					</p>
+				)}
 				{error && <p className="text-sm text-red-500">{error}</p>}
-				<div className="space-x-2">
+				<div className="flex items-center space-x-2">
 					{tags.map((tag, index) => (
-						<TagCard key={index} href={`/tags/${tag}`}>
+						<RemovableTagCard
+							key={index}
+							onRemove={() => removeTag(tag)}
+						>
 							{tag}
-						</TagCard>
+						</RemovableTagCard>
 					))}
 				</div>
 			</div>
@@ -107,7 +147,7 @@ const QuestionForm = () => {
 				type="submit"
 				className="w-full bg-gray-500 hover:bg-gray-600 dark:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer"
 			>
-				Create
+				{isEdit ? "Update" : "Create"}
 			</Button>
 		</form>
 	);
