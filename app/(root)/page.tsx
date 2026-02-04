@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import ROUTES from "@/routes";
 import Link from "next/link";
 import { GetAllQuestions } from "@/lib/actions/GetAllQuestions.actions";
+import DataRenderer from "@/components/DataRenderer";
 
 export default async function Home({
 	searchParams,
@@ -25,7 +26,7 @@ export default async function Home({
 
 	// const user = await auth();
 
-	const { questions } = data || {};
+	const { questions = [] } = data || {};
 
 	return (
 		<div className="p-5 space-y-5">
@@ -41,17 +42,16 @@ export default async function Home({
 				</Button>
 			</div>
 			<Filters />
-			{success && data ? (
-				questions?.length ? (
-					questions?.map((question, index) => (
+			<DataRenderer
+				success={success}
+				data={questions}
+				errorMessage={message}
+				render={(questions) =>
+					questions.map((question, index) => (
 						<ThreadCard question={question} key={index} />
 					))
-				) : (
-					<p>No result found</p>
-				)
-			) : (
-				<p>{message}</p>
-			)}
+				}
+			/>
 		</div>
 	);
 }
