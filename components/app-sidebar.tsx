@@ -4,27 +4,30 @@ import * as React from "react";
 import {
 	AudioWaveform,
 	BookOpen,
-	Bot,
 	Command,
-	Frame,
 	GalleryVerticalEnd,
-	Map,
-	PieChart,
-	Settings2,
-	SquareTerminal,
+	HomeIcon,
+	MessageCircleCodeIcon,
+	NewspaperIcon,
+	TagIcon,
 } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
+
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
 	SidebarHeader,
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
 	SidebarRail,
 } from "@/components/ui/sidebar";
+import ROUTES from "@/routes";
+import Link from "next/link";
+import { FaQuestionCircle } from "react-icons/fa";
+import { usePathname } from "next/navigation";
 
 // This is sample data.
 const data = {
@@ -50,125 +53,58 @@ const data = {
 			plan: "Free",
 		},
 	],
-	navMain: [
-		{
-			title: "Playground",
-			url: "#",
-			icon: SquareTerminal,
-			isActive: true,
-			items: [
-				{
-					title: "History",
-					url: "#",
-				},
-				{
-					title: "Starred",
-					url: "#",
-				},
-				{
-					title: "Settings",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Models",
-			url: "#",
-			icon: Bot,
-			items: [
-				{
-					title: "Genesis",
-					url: "#",
-				},
-				{
-					title: "Explorer",
-					url: "#",
-				},
-				{
-					title: "Quantum",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Documentation",
-			url: "#",
-			icon: BookOpen,
-			items: [
-				{
-					title: "Introduction",
-					url: "#",
-				},
-				{
-					title: "Get Started",
-					url: "#",
-				},
-				{
-					title: "Tutorials",
-					url: "#",
-				},
-				{
-					title: "Changelog",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Settings",
-			url: "#",
-			icon: Settings2,
-			items: [
-				{
-					title: "General",
-					url: "#",
-				},
-				{
-					title: "Team",
-					url: "#",
-				},
-				{
-					title: "Billing",
-					url: "#",
-				},
-				{
-					title: "Limits",
-					url: "#",
-				},
-			],
-		},
-	],
-	projects: [
-		{
-			name: "Design Engineering",
-			url: "#",
-			icon: Frame,
-		},
-		{
-			name: "Sales & Marketing",
-			url: "#",
-			icon: PieChart,
-		},
-		{
-			name: "Travel",
-			url: "#",
-			icon: Map,
-		},
-	],
 };
 
+const navLinks = [
+	{ name: "Home", url: ROUTES.HOME, icon: HomeIcon },
+	{ name: "Tags", url: "#", icon: TagIcon },
+	{
+		name: "Popular Questions",
+		url: ROUTES.QUESTIONS,
+		icon: FaQuestionCircle,
+	},
+	{
+		name: "Ask a new question",
+		url: ROUTES.QUESTION_CREATE,
+		icon: MessageCircleCodeIcon,
+	},
+	{ name: "Newest", url: "#", icon: NewspaperIcon },
+];
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const pathname = usePathname();
 	return (
 		<Sidebar
 			collapsible="icon"
 			{...props}
 			className=" flex flex-col  items-center justify-between  h-full border-none hover:border-none focus:border-none focus:ring-0 "
 		>
-			<SidebarHeader className="mt-3 ">
-				<TeamSwitcher teams={data.teams} />
+			<SidebarHeader className="mt-3">
+				<BookOpen />
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
-				<NavProjects projects={data.projects} />
+				<SidebarMenu className="space-y-5 mt-3">
+					{navLinks.map((navLink) => (
+						<SidebarMenuItem
+							key={navLink.name}
+							className="rounded-xl bg-none ml-1"
+						>
+							<SidebarMenuButton
+								asChild
+								isActive={pathname === navLink.url}
+								size={"lg"}
+								className="[&>svg]:size-6 group-data-[collapsible=icon]:[&>svg]:ml-1"
+							>
+								<Link href={navLink.url}>
+									<navLink.icon />
+									<span className="font-bold">
+										{navLink.name}
+									</span>
+								</Link>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					))}
+				</SidebarMenu>
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser user={data.user} />
