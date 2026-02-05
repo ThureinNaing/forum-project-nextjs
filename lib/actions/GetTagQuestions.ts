@@ -16,7 +16,11 @@ const GetTagQuestion = async (params: {
 	tagId?: string;
 }): Promise<{
 	success: boolean;
-	data?: { tag: ITagDocument; questions: IQuestionDocument; isNext: boolean };
+	data?: {
+		tag: ITagDocument;
+		questions: IQuestionDocument[];
+		isNext: boolean;
+	};
 	message?: string;
 	details?: object | null;
 }> => {
