@@ -5,5 +5,6 @@ const ROUTES = {
 	QUESTIONS: "/questions",
 	QUESTION_CREATE: "/questions/create",
 	QUESTION_DETAILS: (id: string) => "/questions/" + id,
+	TAGS: "/tags",
 };
 export default ROUTES;

@@ -57,7 +57,7 @@ const data = {
 
 const navLinks = [
 	{ name: "Home", url: ROUTES.HOME, icon: HomeIcon },
-	{ name: "Tags", url: "#", icon: TagIcon },
+	{ name: "Tags", url: ROUTES.TAGS, icon: TagIcon },
 	{
 		name: "Popular Questions",
 		url: ROUTES.QUESTIONS,
