@@ -42,9 +42,9 @@ export default async function Home({
 								return (
 									<TagInfoCard
 										key={index}
+										id={tag._id.toString()}
 										name={tag.name}
 										count={tag.questions}
-										id={tag.id}
 									/>
 								);
 							})}
