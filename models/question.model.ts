@@ -54,7 +54,7 @@ const QuestionSchema = new Schema(
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 const Question =

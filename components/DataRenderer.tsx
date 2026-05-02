@@ -22,7 +22,7 @@ const DataRenderer = ({
 	if (!data || !data.length)
 		return <p className="text-2xl text-center">No Data Found!</p>;
 
-	return <div className="space-y-5">{render(data)}</div>;
+	return <div>{render(data)}</div>;
 };
 
 export default DataRenderer;
