@@ -1,11 +1,12 @@
 "use server";
 
-import Question, { IQuestionDocument } from "@/models/question.model";
+import Question from "@/models/question.model";
 import dbConnect from "../dbConnect";
 import validateBody from "../validateBody";
 import PaginatedSearchParamsSchema from "../Schema/PaginatedSearchParamsSchema";
 import { FilterQuery } from "mongoose";
 import { handleActionErrorResponse } from "../response";
+import type { QuestionCard } from "@/types/question";
 
 export async function GetAllQuestions(params: {
 	page?: number;
@@ -15,7 +16,7 @@ export async function GetAllQuestions(params: {
 	sort?: string;
 }): Promise<{
 	success: boolean;
-	data?: { questions: IQuestionDocument[]; isNext?: boolean };
+	data?: { questions: QuestionCard[]; isNext?: boolean };
 	message?: string;
 	deatils?: object | null;
 }> {

@@ -9,11 +9,11 @@ import {
 import { Eye, MessageCircle, ThumbsUp, User } from "lucide-react";
 
 import TagCard from "./TagCard";
-import { IQuestionDocument } from "../models/question.model";
 import Link from "next/link";
 import ROUTES from "@/routes";
+import type { QuestionCard } from "@/types/question";
 
-const ThreadCard = ({ question }: { question: IQuestionDocument }) => {
+const ThreadCard = ({ question }: { question: QuestionCard }) => {
 	return (
 		<Link href={ROUTES.QUESTION_DETAILS(question._id.toString())}>
 			<Card className="bg-gray-200 dark:bg-[#081338] shadow-md dark:shadow-blue-900 mb-5 cursor-pointer">

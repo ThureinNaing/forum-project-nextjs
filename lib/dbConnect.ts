@@ -1,7 +1,6 @@
 import mongoose, { Mongoose } from "mongoose";
 import "@/models/index";
 declare global {
-	// eslint-disable-next-line no-var
 	var mongoose: {
 		conn: Mongoose | null;
 		promise: Promise<Mongoose> | null;
@@ -9,7 +8,6 @@ declare global {
 }
 
 // if (!mongoose.models.image) {
-// 	// _id ကို String အဖြစ် အတင်းသတ်မှတ်ပေးလိုက်ခြင်းဖြင့် Cast Error ကို ကျော်လွှားမယ်
 // 	mongoose.model(
 // 		"image",
 // 		new mongoose.Schema({ _id: String }, { strict: false })
@@ -26,7 +24,7 @@ async function dbConnect() {
 
 	if (!MONGODB_URI) {
 		throw new Error(
-			"Please define the MONGODB_URI environment variable inside .env.local"
+			"Please define the MONGODB_URI environment variable inside .env.local",
 		);
 	}
 

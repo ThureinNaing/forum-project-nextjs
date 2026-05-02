@@ -6,7 +6,8 @@ import { handleActionErrorResponse } from "../response";
 import GetTagQuestionSchema from "../Schema/GetTagQuestinSchema";
 import validateBody from "../validateBody";
 import { FilterQuery } from "mongoose";
-import Question, { IQuestionDocument } from "@/models/question.model";
+import Question from "@/models/question.model";
+import type { QuestionCard } from "@/types/question";
 
 const GetTagQuestion = async (params: {
 	page?: number;
@@ -18,7 +19,7 @@ const GetTagQuestion = async (params: {
 	success: boolean;
 	data?: {
 		tag: ITagDocument;
-		questions: IQuestionDocument[];
+		questions: QuestionCard[];
 		isNext: boolean;
 	};
 	message?: string;

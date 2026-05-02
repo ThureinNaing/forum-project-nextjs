@@ -3,12 +3,15 @@
 import dbConnect from "../dbConnect";
 import validateBody from "../validateBody";
 import { handleActionErrorResponse } from "../response";
-import Question, { IQuestion } from "@/models/question.model";
+import Question from "@/models/question.model";
 import GetQuestionSchema from "../Schema/GetQuestionSchema";
+import type { QuestionDetails } from "@/types/question";
 
 export async function GetQuestion(params: { questionId: string }): Promise<{
 	success: boolean;
-	data?: IQuestion;
+	data?: QuestionDetails;
+	message?: string;
+	details?: object | null;
 }> {
 	await dbConnect();
 

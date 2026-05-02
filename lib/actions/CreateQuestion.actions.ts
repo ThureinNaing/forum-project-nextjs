@@ -11,12 +11,18 @@ import Tag from "@/models/tag.model";
 import TagQuestion from "@/models/tag-question.model";
 import { handleActionErrorResponse } from "../response";
 import { api } from "../api";
+import type { QuestionWriteResult } from "@/types/question";
 
 export async function CreateQuestionAction(params: {
 	title: string;
 	content: string;
 	tags: string[];
-}) {
+}): Promise<{
+	success: boolean;
+	data?: QuestionWriteResult;
+	message?: string;
+	details?: object | null;
+}> {
 	await dbConnect();
 
 	try {
@@ -27,7 +33,11 @@ export async function CreateQuestionAction(params: {
 		const email = auth_session?.user?.email;
 
 		if (!email)
-			return { success: false, message: "User not authenticated" };
+			return {
+				success: false,
+				message: "User not authenticated",
+				details: null,
+			};
 
 		const user = await api.users.getByEmail(email as string);
 

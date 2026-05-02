@@ -8,8 +8,8 @@ import { Label } from "@/components/ui/label";
 import { CreateQuestionAction } from "@/lib/actions/CreateQuestion.actions";
 import { QuestionEdit } from "@/lib/actions/QuestionEdit.actions";
 
-import { IQuestion } from "@/models/question.model";
 import ROUTES from "@/routes";
+import type { QuestionDetails } from "@/types/question";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -18,7 +18,7 @@ const QuestionForm = ({
 	question,
 	isEdit = false,
 }: {
-	question?: IQuestion;
+	question?: QuestionDetails;
 	isEdit?: boolean;
 }) => {
 	const [title, setTitle] = useState(question?.title ?? "");
@@ -71,9 +71,7 @@ const QuestionForm = ({
 				toast.success("Question created successfully!");
 				return router.push(ROUTES.QUESTION_DETAILS(result.data?._id));
 			} else {
-				toast.error(
-					result.data?.toString() || "Failed to create question"
-				);
+				toast.error(result.message || "Failed to create question");
 			}
 		} catch (err) {
 			if (err instanceof Error) {

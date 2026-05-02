@@ -9,6 +9,7 @@ import Question from "@/models/question.model";
 import Tag, { ITagDocument } from "@/models/tag.model";
 import TagQuestion from "@/models/tag-question.model";
 import { handleActionErrorResponse } from "../response";
+import type { QuestionWriteResult } from "@/types/question";
 
 export async function QuestionEdit(params: {
 	questionId: string;
@@ -17,13 +18,9 @@ export async function QuestionEdit(params: {
 	tags: string[];
 }): Promise<{
 	success: boolean;
-	data?: {
-		_id: string;
-		title: string;
-		content: string;
-		author: string;
-		tags: string[];
-	};
+	data?: QuestionWriteResult;
+	message?: string;
+	details?: object | null;
 }> {
 	await dbConnect();
 	const validatedData = validateBody(params, EditQuestionSchema);
@@ -40,6 +37,11 @@ export async function QuestionEdit(params: {
 			throw new Error("Failed to get a question");
 		}
 
+		const currentTags = question.tags as unknown as ITagDocument[];
+		const currentTagNames = currentTags.map((tag) =>
+			tag.name.toLowerCase()
+		);
+
 		if (question.title !== title || question.content !== content) {
 			question.title = title;
 			question.content = content;
@@ -47,9 +49,9 @@ export async function QuestionEdit(params: {
 		}
 
 		const tagsToAdd = tags.filter(
-			(tag: string) => !question.tags.includes(tag.toLowerCase())
+			(tag: string) => !currentTagNames.includes(tag.toLowerCase())
 		);
-		const tagsToRemove = question.tags.filter(
+		const tagsToRemove = currentTags.filter(
 			(tag: ITagDocument) => !tags.includes(tag.name.toLowerCase())
 		);
 
@@ -69,10 +71,17 @@ export async function QuestionEdit(params: {
 				question: questionId,
 			});
 
-			question.tags = question.tags.filter(
-				(tagId: mongoose.Types.ObjectId) =>
-					!tagsToRemove.includes(tagId)
-			);
+			question.tags = currentTags
+				.filter(
+					(tag: ITagDocument) =>
+						!tagsToRemove.some((tagToRemove) =>
+							tagToRemove._id.equals(tag._id)
+						)
+				)
+				.map(
+					(tag: ITagDocument) =>
+						new mongoose.Types.ObjectId(tag._id.toString())
+				);
 		}
 
 		if (tagsToAdd.length) {
@@ -99,7 +108,7 @@ export async function QuestionEdit(params: {
 				}
 
 				if (
-					!question.tags.find((tagId: mongoose.Types.ObjectId) =>
+					!(question.tags as mongoose.Types.ObjectId[]).some((tagId) =>
 						tagId.equals(existingTag._id)
 					)
 				) {
@@ -107,7 +116,7 @@ export async function QuestionEdit(params: {
 				}
 			}
 			if (newTagDocuments.length) {
-				await TagQuestion.insertMany(newTagDocuments);
+				await TagQuestion.insertMany(newTagDocuments, { session });
 			}
 		}
 		await question.save({ session });
