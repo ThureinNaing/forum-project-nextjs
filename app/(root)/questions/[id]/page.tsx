@@ -4,6 +4,7 @@ import { GetQuestion } from "@/lib/actions/GetQuestion.actions";
 import { IncrementViews } from "@/lib/actions/IncrementViews.action";
 import { notFound } from "next/navigation";
 import { after } from "next/server";
+import AnswerForm from "../components/AnswerForm";
 
 async function page({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -37,6 +38,9 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 						{tag.name}
 					</TagCard>
 				))}
+			</div>
+			<div className="my-3">
+				<AnswerForm questionId={id} />
 			</div>
 		</div>
 	);
