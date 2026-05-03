@@ -89,7 +89,7 @@ const Editor = ({
 
 						// only allow protocols specified in ctx.protocols
 						const allowedProtocols = ctx.protocols.map((p) =>
-							typeof p === "string" ? p : p.scheme
+							typeof p === "string" ? p : p.scheme,
 						);
 
 						if (!allowedProtocols.includes(protocol)) {
@@ -174,12 +174,14 @@ const Editor = ({
 			<Label className="mb-0 font-semibold">{label}</Label>
 			<div className="flex items-center gap-3 p-2 mt-3 rounded-lg bg-gray-200 dark:bg-[#081338]">
 				<button
+					type="button"
 					onClick={() => editor?.chain().focus().toggleBold().run()}
 					className={editor?.isActive("bold") ? "text-blue-600" : ""}
 				>
 					B
 				</button>
 				<button
+					type="button"
 					onClick={() => editor?.chain().focus().toggleItalic().run()}
 					className={
 						editor?.isActive("italic") ? "text-blue-600" : ""
@@ -188,6 +190,7 @@ const Editor = ({
 					<ItalicIcon size={16} />
 				</button>
 				<button
+					type="button"
 					onClick={() =>
 						editor
 							?.chain()
@@ -204,6 +207,7 @@ const Editor = ({
 					H1
 				</button>
 				<button
+					type="button"
 					onClick={() =>
 						editor
 							?.chain()
@@ -220,6 +224,7 @@ const Editor = ({
 					H2
 				</button>
 				<button
+					type="button"
 					onClick={() =>
 						editor
 							?.chain()
@@ -236,6 +241,7 @@ const Editor = ({
 					H3
 				</button>
 				<button
+					type="button"
 					onClick={setLink}
 					className={`${
 						editor?.isActive("link") ? "text-blue-600" : ""
@@ -244,6 +250,7 @@ const Editor = ({
 					<Link2Icon size={20} />
 				</button>
 				<button
+					type="button"
 					onClick={() =>
 						editor?.chain().focus().toggleBulletList().run()
 					}
@@ -254,6 +261,7 @@ const Editor = ({
 					<List size={20} />
 				</button>
 				<button
+					type="button"
 					onClick={() =>
 						editor?.chain().focus().toggleOrderedList().run()
 					}
@@ -264,6 +272,7 @@ const Editor = ({
 					<ListOrdered size={20} />
 				</button>
 				<button
+					type="button"
 					onClick={() =>
 						editor?.chain().focus().toggleCodeBlock().run()
 					}

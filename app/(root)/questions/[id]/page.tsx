@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { after } from "next/server";
 import AnswerForm from "../components/AnswerForm";
 import { GetAnswers } from "@/lib/actions/GetAnswers.action";
+import AnswerList from "../components/AnswerList";
 
 async function page({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -19,12 +20,18 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 		await IncrementViews({ questionId: id }); // Increment views count
 	});
 
-	const { data: answers } = await GetAnswers({
+	const {
+		success,
+		data: answersData,
+		message: answerErrorMsg,
+	} = await GetAnswers({
 		page: 1,
 		pageSize: 10,
 		filter: "latest",
 		questionId: id,
 	});
+
+	const { answers = [], totalAnswers = 0 } = answersData || {};
 	console.log(answers);
 
 	return (
@@ -48,7 +55,18 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 					</TagCard>
 				))}
 			</div>
+
 			<div className="my-3">
+				<AnswerList
+					answers={answers}
+					totalAnswers={totalAnswers}
+					success={success}
+					errorMessage={answerErrorMsg}
+				/>
+			</div>
+
+			<div className="my-3">
+				2
 				<AnswerForm questionId={id} />
 			</div>
 		</div>

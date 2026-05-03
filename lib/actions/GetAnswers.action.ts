@@ -5,7 +5,6 @@ import dbConnect from "../dbConnect";
 import { handleActionErrorResponse } from "../response";
 import validateBody from "../validateBody";
 import GetAnswerSchema from "../Schema/GetAnswerSchema";
-import page from "../../app/(root)/questions/[id]/page";
 
 export async function GetAnswers(params: {
 	page: number;
