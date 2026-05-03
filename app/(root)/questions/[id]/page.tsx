@@ -5,6 +5,7 @@ import { IncrementViews } from "@/lib/actions/IncrementViews.action";
 import { notFound } from "next/navigation";
 import { after } from "next/server";
 import AnswerForm from "../components/AnswerForm";
+import { GetAnswers } from "@/lib/actions/GetAnswers.action";
 
 async function page({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -17,6 +18,14 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 	after(async () => {
 		await IncrementViews({ questionId: id }); // Increment views count
 	});
+
+	const { data: answers } = await GetAnswers({
+		page: 1,
+		pageSize: 10,
+		filter: "latest",
+		questionId: id,
+	});
+	console.log(answers);
 
 	return (
 		<div className="p-3">
