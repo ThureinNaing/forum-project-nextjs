@@ -155,6 +155,7 @@ const Editor = ({
 			}
 		} catch (error) {
 			editor.commands.clearContent();
+			console.log(error);
 		}
 	}, [value, editor]);
 	const setLink = useCallback(() => {
