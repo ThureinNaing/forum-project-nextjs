@@ -11,7 +11,7 @@ import { toast } from "sonner";
 const AnswerForm = ({ questionId }: { questionId: string }) => {
 	const [content, setContent] = useState("");
 	const router = useRouter();
-
+	console.log(content);
 	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault();

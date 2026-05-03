@@ -1,5 +1,6 @@
 "use client";
 // bg-[#081338]
+import { Markdown } from "tiptap-markdown";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Bold from "@tiptap/extension-bold";
@@ -13,7 +14,7 @@ import {
 	List,
 	ListOrdered,
 } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
@@ -133,12 +134,29 @@ const Editor = ({
 					}
 				},
 			}),
+			Markdown.configure({ html: false }),
 		],
-		content: value,
+
 		onUpdate: ({ editor }) => {
-			onChange(editor.getHTML());
+			const md = editor?.storage?.markdown?.getMarkdown();
+			if (md !== value) {
+				onChange(md);
+			}
 		},
 	});
+
+	useEffect(() => {
+		if (!editor) return;
+		if (typeof value !== "string") return;
+		try {
+			const md = editor?.storage?.markdown?.getMarkdown();
+			if (md !== value) {
+				editor.commands.setContent(value);
+			}
+		} catch (error) {
+			editor.commands.clearContent();
+		}
+	}, [value, editor]);
 	const setLink = useCallback(() => {
 		const previousUrl = editor?.getAttributes("link").href;
 		const url = window.prompt("URL", previousUrl);
