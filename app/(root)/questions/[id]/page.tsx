@@ -67,7 +67,11 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 
 			<div className="my-3">
 				2
-				<AnswerForm questionId={id} />
+				<AnswerForm
+					questionId={id}
+					questionTitle={question.title}
+					questionContent={question.content}
+				/>
 			</div>
 		</div>
 	);

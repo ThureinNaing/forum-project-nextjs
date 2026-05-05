@@ -19,15 +19,34 @@ const AnswerForm = ({
 	questionContent: string;
 }) => {
 	const [content, setContent] = useState("");
+	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	const generateAiAnswer = async () => {
-		console.log("ai generate");
-		const { success, data } = await GenerateAiAnswer({
-			title: questionTitle,
-			content: questionContent,
-			userAnswer: content,
-		});
+		try {
+			setLoading(true);
+
+			const { success, data, message, details } = await GenerateAiAnswer({
+				title: questionTitle,
+				content: questionContent,
+				userAnswer: content,
+			});
+
+			console.log(success);
+			console.log("messages: ", message);
+			console.log("details: ", details);
+
+			if (success && data) {
+				let { answer = "" } = data || {};
+				setContent(answer);
+			} else {
+				toast.error(message);
+			}
+			setLoading(false);
+		} catch (error: any) {
+			toast.error(error);
+			setLoading(false);
+		}
 	};
 
 	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,7 +88,7 @@ const AnswerForm = ({
 					type="button"
 					onClick={generateAiAnswer}
 				>
-					Generate Ai Answer
+					{loading ? "Loading..." : "Generate Ai Answer"}
 				</Button>
 				<Button variant={"ghost"} className="mt-3" type="submit">
 					Post Your Answer
