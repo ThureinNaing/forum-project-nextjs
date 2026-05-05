@@ -4,7 +4,7 @@ import dbConnect from "../dbConnect";
 import { handleActionErrorResponse } from "../response";
 import { GenerateAiAnswerSchema } from "../Schema/GenerateAiAnswerSchema";
 import validateBody from "../validateBody";
-import { groq, type GroqLanguageModelOptions } from "@ai-sdk/groq";
+import { groq } from "@ai-sdk/groq";
 import { generateText } from "ai";
 
 export async function GenerateAiAnswer(params: {
@@ -33,7 +33,7 @@ export async function GenerateAiAnswer(params: {
       Use the following context and user's answer ONLY to improve accuracy.
       **Context:** ${content} 
       **User's Answer:** ${userAnswer}
-			
+
       STRICT RULES:
       1. Correctness: If the user's answer is correct, refine and expand on it. If incorrect or incomplete, provide the proper correction.
       2. No Meta-Talk: Do NOT mention "the context", "the prompt", "the user's answer", or phrases like "based on provided info".

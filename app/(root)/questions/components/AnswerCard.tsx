@@ -1,8 +1,9 @@
 import Preview from "@/components/Preview";
-import { IAnswer } from "@/models/answer.model";
+import { IAnswerDocument } from "@/models/answer.model";
 import React from "react";
+import VoteButtons from "./VoteButtons";
 
-function AnswerCard({ answer }: { answer: IAnswer }) {
+function AnswerCard({ answer }: { answer: IAnswerDocument }) {
 	const authorName = ((answer as any)?.author?.name as string) || "Anonymous";
 	const upvotes = (answer as any)?.upvotes ?? 0;
 	const downvotes = (answer as any)?.downvotes ?? 0;
@@ -30,16 +31,12 @@ function AnswerCard({ answer }: { answer: IAnswer }) {
 			</div>
 
 			<footer className="mt-4 flex items-center justify-between">
-				<div className="flex items-center gap-3 text-sm">
-					<div className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-slate-600 dark:border-slate-700 dark:text-slate-300">
-						<span className="select-none">▲</span>
-						<span className="tabular-nums">{upvotes}</span>
-					</div>
-					<div className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-slate-600 dark:border-slate-700 dark:text-slate-300">
-						<span className="select-none">▼</span>
-						<span className="tabular-nums">{downvotes}</span>
-					</div>
-				</div>
+				<VoteButtons
+					type={"answer"}
+					typeId={answer?._id.toString()}
+					initialUpvotes={answer.upvotes}
+					initialDownvotes={answer.downvotes}
+				/>
 			</footer>
 		</article>
 	);
