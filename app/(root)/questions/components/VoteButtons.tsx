@@ -39,7 +39,7 @@ const VoteButtons = ({
 				typeId,
 				voteType,
 			});
-			console.log("vote action: ", success);
+
 			if (success) {
 				let { upvotes = 0, downvotes = 0, userVote } = data || {};
 				setUpvotes(upvotes);

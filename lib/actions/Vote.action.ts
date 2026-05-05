@@ -48,69 +48,68 @@ export async function VoteAction(params: {
 			type,
 		}).session(session);
 
-		let newUpvotes = item.upvotes || 0;
-		let newDownvotes = item.downvotes || 0;
-		let userVote: "upvote" | "downvote" | null = null;
+		let upvoteChange = 0;
+		let downvoteChange = 0;
+		let finalUserVote: "upvote" | "downvote" | null = null;
 
 		if (existingVote) {
 			// If user already voted, handle toggle/change
 			if (existingVote.voteType === voteType) {
 				// Same vote type clicked - remove the vote
 				if (voteType === "upvote") {
-					newUpvotes = Math.max(0, newUpvotes - 1); //zero is default
+					upvoteChange = -1;
 				} else {
-					newDownvotes = Math.max(0, newDownvotes - 1);
+					downvoteChange = -1;
 				}
 				await Vote.findByIdAndDelete(existingVote._id).session(session);
-				userVote = null;
+				finalUserVote = null;
 			} else {
 				// Different vote type - switch the vote
-				if (existingVote.voteType === "upvote") {
-					newUpvotes = Math.max(0, newUpvotes - 1);
-					newDownvotes += 1;
+				if (voteType === "upvote") {
+					upvoteChange = 1;
+					downvoteChange = -1;
 				} else {
-					newDownvotes = Math.max(0, newDownvotes - 1);
-					newUpvotes += 1;
+					upvoteChange = -1;
+					downvoteChange = 1;
 				}
+
 				existingVote.voteType = voteType;
 				await existingVote.save({ session });
-				userVote = voteType;
+				finalUserVote = voteType;
 			}
 		} else {
 			// New vote
 			await Vote.create(
-				[
-					{
-						author: userId,
-						type_id: typeId,
-						type,
-						voteType,
-					},
-				],
+				[{ author: userId, type_id: typeId, type, voteType }],
 				{ session },
 			);
 
 			if (voteType === "upvote") {
-				newUpvotes += 1;
+				upvoteChange = 1;
 			} else {
-				newDownvotes += 1;
+				downvoteChange = 1;
 			}
-			userVote = voteType;
+
+			finalUserVote = voteType;
 		}
 
 		// Update the item's vote counts
-		item.upvotes = newUpvotes;
-		item.downvotes = newDownvotes;
-		await item.save({ session });
+		const updatedItem = await Model.findByIdAndUpdate(
+			typeId,
+			{ $inc: { upvotes: upvoteChange, downvotes: downvoteChange } },
+			{ new: true, session },
+		);
+
+		if (!updatedItem) throw new Error("Target item not found");
 
 		await session.commitTransaction();
 
 		return {
 			success: true,
 			data: {
-				upvotes: newUpvotes,
-				downvotes: newDownvotes,
-				userVote,
+				upvotes: updatedItem.upvotes,
+				downvotes: updatedItem.downvotes,
+				userVote: finalUserVote,
 			},
 		};
 	} catch (error) {
