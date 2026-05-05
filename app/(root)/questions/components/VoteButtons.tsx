@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import GetUserVote from "@/lib/actions/GetUserVote.action";
+import { VoteAction } from "@/lib/actions/Vote.action";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const VoteButtons = ({
 	typeId,
@@ -19,10 +22,33 @@ const VoteButtons = ({
 		null,
 	);
 
-	const handleVote = (voteType: "upvote" | "downvote") => {
-		setUpvotes(100);
-		setDownvotes(200);
-		setUserVote(voteType);
+	useEffect(() => {
+		const fetchUserVote = async () => {
+			const { success, data } = await GetUserVote({ type, typeId });
+			if (success && data) {
+				setUserVote(data.userVote);
+			}
+		};
+		fetchUserVote();
+	}, [type, typeId]);
+
+	const handleVote = async (voteType: "upvote" | "downvote") => {
+		try {
+			const { success, data } = await VoteAction({
+				type,
+				typeId,
+				voteType,
+			});
+			console.log("vote action: ", success);
+			if (success) {
+				let { upvotes = 0, downvotes = 0, userVote } = data || {};
+				setUpvotes(upvotes);
+				setDownvotes(downvotes);
+				setUserVote(userVote ?? null);
+			}
+		} catch (error: any) {
+			toast.error(error);
+		}
 	};
 
 	return (

@@ -21,7 +21,7 @@ export default async function GetUserVote(params: {
 	const auth_session = await auth();
 	const userEmail = auth_session?.user?.email;
 	try {
-		const userId = await User.findById(userEmail);
+		const userId = await User.findOne({ email: userEmail });
 		if (!userId) throw new Error("Unauthorized");
 
 		const validatedData = validateBody(params, GetUserVoteSchema);

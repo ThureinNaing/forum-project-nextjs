@@ -31,7 +31,7 @@ export async function VoteAction(params: {
 	try {
 		const auth_session = await auth();
 		const userEmail = auth_session?.user?.email;
-		const userId = await User.findById(userEmail);
+		const userId = await User.findOne({ email: userEmail });
 
 		if (!userId) throw new Error("Unauthorized");
 
@@ -104,6 +104,7 @@ export async function VoteAction(params: {
 		await item.save({ session });
 
 		await session.commitTransaction();
+
 		return {
 			success: true,
 			data: {
