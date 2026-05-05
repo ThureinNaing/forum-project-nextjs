@@ -2,11 +2,12 @@ import Preview from "@/components/Preview";
 import { IAnswerDocument } from "@/models/answer.model";
 import React from "react";
 import VoteButtons from "./VoteButtons";
+import { formatDistanceToNow } from "date-fns";
 
 function AnswerCard({ answer }: { answer: IAnswerDocument }) {
 	const authorName = ((answer as any)?.author?.name as string) || "Anonymous";
-	const upvotes = (answer as any)?.upvotes ?? 0;
-	const downvotes = (answer as any)?.downvotes ?? 0;
+	// const upvotes = (answer as any)?.upvotes ?? 0;
+	// const downvotes = (answer as any)?.downvotes ?? 0;
 
 	const initial = authorName?.charAt(0)?.toUpperCase?.() || "?";
 
@@ -20,7 +21,10 @@ function AnswerCard({ answer }: { answer: IAnswerDocument }) {
 					<p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
 						{authorName}{" "}
 						<span className="text-gray-600">
-							was answered 3 mins ago
+							answered{" "}
+							{formatDistanceToNow(new Date(answer.createdAt), {
+								addSuffix: true,
+							})}
 						</span>
 					</p>
 				</div>

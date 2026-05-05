@@ -41,7 +41,7 @@ const VoteButtons = ({
 			});
 
 			if (success) {
-				let { upvotes = 0, downvotes = 0, userVote } = data || {};
+				const { upvotes = 0, downvotes = 0, userVote } = data || {};
 				setUpvotes(upvotes);
 				setDownvotes(downvotes);
 				setUserVote(userVote ?? null);

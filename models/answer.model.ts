@@ -8,7 +8,9 @@ export interface IAnswer {
 	downvotes: number;
 }
 
-export interface IAnswerDocument extends IAnswer, Document {}
+export interface IAnswerDocument extends IAnswer, Document {
+	createdAt: string | number | Date;
+}
 
 const AnswerSchema = new Schema(
 	{
@@ -37,7 +39,7 @@ const AnswerSchema = new Schema(
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 const Answer = models?.Answer || model<IAnswer>("Answer", AnswerSchema);

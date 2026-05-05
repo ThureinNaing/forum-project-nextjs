@@ -37,7 +37,7 @@ const AnswerForm = ({
 			console.log("details: ", details);
 
 			if (success && data) {
-				let { answer = "" } = data || {};
+				const { answer = "" } = data || {};
 				setContent(answer);
 			} else {
 				toast.error(message);
