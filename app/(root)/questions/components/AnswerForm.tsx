@@ -43,8 +43,10 @@ const AnswerForm = ({
 				toast.error(message);
 			}
 			setLoading(false);
-		} catch (error: any) {
-			toast.error(error);
+		} catch (error) {
+			const errorMessage =
+				error instanceof Error ? error.message : "AI generation failed";
+			toast.error(errorMessage);
 			setLoading(false);
 		}
 	};

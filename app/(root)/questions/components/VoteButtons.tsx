@@ -46,8 +46,12 @@ const VoteButtons = ({
 				setDownvotes(downvotes);
 				setUserVote(userVote ?? null);
 			}
-		} catch (error: any) {
-			toast.error(error);
+		} catch (error: unknown) {
+			const errorMessage =
+				error instanceof Error
+					? error.message
+					: "An error occurred while voting";
+			toast.error(errorMessage);
 		}
 	};
 
