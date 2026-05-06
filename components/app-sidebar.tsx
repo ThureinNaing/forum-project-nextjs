@@ -6,6 +6,7 @@ import {
 	BookOpen,
 	Command,
 	GalleryVerticalEnd,
+	Globe,
 	HomeIcon,
 	MessageCircleCodeIcon,
 	NewspaperIcon,
@@ -67,6 +68,11 @@ const navLinks = [
 		name: "Ask a new question",
 		url: ROUTES.QUESTION_CREATE,
 		icon: MessageCircleCodeIcon,
+	},
+	{
+		name: "Community",
+		url: ROUTES.COMMUNITY,
+		icon: Globe,
 	},
 	{ name: "Newest", url: "#", icon: NewspaperIcon },
 ];
