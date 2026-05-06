@@ -8,6 +8,7 @@ import AnswerForm from "../components/AnswerForm";
 import { GetAnswers } from "@/lib/actions/GetAnswers.action";
 import AnswerList from "../components/AnswerList";
 import VoteButtons from "../components/VoteButtons";
+import ToogleBookmark from "../components/ToogleBookmark";
 
 async function page({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -33,7 +34,6 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 	});
 
 	const { answers = [], totalAnswers = 0 } = answersData || {};
-	console.log(answers);
 
 	return (
 		<div className="p-3">
@@ -48,6 +48,7 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 					/>
 					<div>{question.answers} Answers</div>
 					<div>{question.views} Views</div>
+					<ToogleBookmark />
 				</div>
 			</div>
 			<div className="my-3">
