@@ -1,5 +1,58 @@
-const page = () => {
-	return <div>page</div>;
-};
+import DataRenderer from "@/components/DataRenderer";
 
-export default page;
+import GetUsersAction from "@/lib/actions/GetUsers.action";
+import UserCard from "./components/UserCard";
+
+export default async function page({
+	searchParams,
+}: {
+	searchParams: Promise<{
+		// search: string | undefined;
+		// filter: string | undefined;
+		[key: string]: string; //don't need to specify exact keys
+	}>;
+}) {
+	const { page, pageSize, search, filter } = await searchParams;
+
+	const { success, data, message } = await GetUsersAction({
+		page: Number(page) || 1,
+		pageSize: Number(pageSize) || 10,
+		search: search || "",
+		filter: filter || "",
+	});
+
+	// const user = await auth();
+
+	const { users = [] } = data || {};
+
+	return (
+		<div className="p-5 space-y-5">
+			<div className="flex items-center justify-between">
+				<div className="font-bold text-3xl dark:text-blue-600">
+					All Users
+				</div>
+			</div>
+			<DataRenderer
+				success={success}
+				data={users}
+				errorMessage={message}
+				render={(users) => {
+					return (
+						<div className="grid grid-cols-4 gap-4">
+							{users.map((user, index) => {
+								return (
+									<UserCard
+										key={index}
+										id={user._id.toString()}
+										name={user.name}
+										image={user.image}
+									/>
+								);
+							})}
+						</div>
+					);
+				}}
+			/>
+		</div>
+	);
+}
