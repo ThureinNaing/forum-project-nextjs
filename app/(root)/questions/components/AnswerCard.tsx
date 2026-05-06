@@ -2,7 +2,7 @@ import Preview from "@/components/Preview";
 import { IAnswerDocument } from "@/models/answer.model";
 import React from "react";
 import VoteButtons from "./VoteButtons";
-import { formatDistanceToNow } from "date-fns";
+import { getTimeStamp } from "@/lib/utils";
 
 function AnswerCard({ answer }: { answer: IAnswerDocument }) {
 	const authorName = ((answer as any)?.author?.name as string) || "Anonymous";
@@ -21,10 +21,7 @@ function AnswerCard({ answer }: { answer: IAnswerDocument }) {
 					<p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
 						{authorName}{" "}
 						<span className="text-gray-600">
-							answered{" "}
-							{formatDistanceToNow(new Date(answer.createdAt), {
-								addSuffix: true,
-							})}
+							answered {getTimeStamp(answer.createdAt)}
 						</span>
 					</p>
 				</div>

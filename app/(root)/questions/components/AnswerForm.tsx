@@ -32,10 +32,6 @@ const AnswerForm = ({
 				userAnswer: content,
 			});
 
-			console.log(success);
-			console.log("messages: ", message);
-			console.log("details: ", details);
-
 			if (success && data) {
 				const { answer = "" } = data || {};
 				setContent(answer);
@@ -66,7 +62,6 @@ const AnswerForm = ({
 				return router.push(ROUTES.QUESTION_DETAILS(questionId));
 			}
 		} catch (error) {
-			console.log("Error submitting answer:", error);
 			toast.error(
 				error instanceof Error
 					? error.message

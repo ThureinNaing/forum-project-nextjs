@@ -71,7 +71,6 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 			</div>
 
 			<div className="my-3">
-				2
 				<AnswerForm
 					questionId={id}
 					questionTitle={question.title}
