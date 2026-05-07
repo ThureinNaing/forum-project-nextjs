@@ -20,6 +20,7 @@ export interface QuestionDetails {
 	downvotes: number;
 	answers: number;
 	author: string;
+	saved: boolean;
 }
 
 export interface QuestionCard {

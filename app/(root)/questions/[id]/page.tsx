@@ -8,7 +8,7 @@ import AnswerForm from "../components/AnswerForm";
 import { GetAnswers } from "@/lib/actions/GetAnswers.action";
 import AnswerList from "../components/AnswerList";
 import VoteButtons from "../components/VoteButtons";
-import ToogleBookmark from "../components/ToogleBookmark";
+import ToggleBookmark from "../components/ToggleBookmark";
 
 async function page({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -48,7 +48,10 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 					/>
 					<div>{question.answers} Answers</div>
 					<div>{question.views} Views</div>
-					<ToogleBookmark />
+					<ToggleBookmark
+						questionId={question._id.toString()}
+						saved={question.saved}
+					/>
 				</div>
 			</div>
 			<div className="my-3">

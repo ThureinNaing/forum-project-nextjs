@@ -26,7 +26,7 @@ const AnswerForm = ({
 		try {
 			setLoading(true);
 
-			const { success, data, message, details } = await GenerateAiAnswer({
+			const { success, data, message } = await GenerateAiAnswer({
 				title: questionTitle,
 				content: questionContent,
 				userAnswer: content,

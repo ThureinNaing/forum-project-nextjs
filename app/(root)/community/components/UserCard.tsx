@@ -1,7 +1,6 @@
 import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { RiProfileFill } from "react-icons/ri";
 
 const UserCard = ({
 	id,
