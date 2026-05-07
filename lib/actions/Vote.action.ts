@@ -31,7 +31,7 @@ export async function VoteAction(params: {
 	try {
 		const auth_session = await auth();
 		const userEmail = auth_session?.user?.email;
-		const userId = await User.findOne({ email: userEmail });
+		const userId = await User.findOne({ email: userEmail }).select("_id");
 
 		if (!userId) throw new Error("Unauthorized");
 
