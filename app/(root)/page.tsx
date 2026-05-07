@@ -5,6 +5,8 @@ import ROUTES from "@/routes";
 import Link from "next/link";
 import { GetAllQuestions } from "@/lib/actions/GetAllQuestions.actions";
 import DataRenderer from "@/components/DataRenderer";
+import CommonFilters from "@/components/CommonFilters";
+import { DefaultFilters, HomePageFilters } from "../../constants/filter";
 
 export default async function Home({
 	searchParams,
@@ -34,6 +36,10 @@ export default async function Home({
 				<div className="font-bold text-3xl dark:text-blue-600">
 					All Threads
 				</div>
+				<CommonFilters
+					filters={HomePageFilters}
+					defaultFilter={DefaultFilters.HomePageFilters}
+				/>
 				<Button
 					variant={"outline"}
 					className="cursor-pointer dark:text-blue-600 dark:hover:text-blue-600"
