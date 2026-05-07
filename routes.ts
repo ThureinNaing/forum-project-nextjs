@@ -7,5 +7,6 @@ const ROUTES = {
 	QUESTION_DETAILS: (id: string) => "/questions/" + id,
 	TAGS: "/tags",
 	COMMUNITY: "/community",
+	BOOKMARKS: "/bookmarks",
 };
 export default ROUTES;

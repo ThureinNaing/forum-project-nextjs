@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
 	AudioWaveform,
+	BookmarkCheck,
 	BookOpen,
 	Command,
 	GalleryVerticalEnd,
@@ -70,11 +71,15 @@ const navLinks = [
 		icon: MessageCircleCodeIcon,
 	},
 	{
+		name: "Bookmarks",
+		url: ROUTES.BOOKMARKS,
+		icon: BookmarkCheck,
+	},
+	{
 		name: "Community",
 		url: ROUTES.COMMUNITY,
 		icon: Globe,
 	},
-	{ name: "Newest", url: "#", icon: NewspaperIcon },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
