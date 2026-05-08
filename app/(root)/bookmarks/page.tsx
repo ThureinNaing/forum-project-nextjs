@@ -5,6 +5,9 @@ import ROUTES from "@/routes";
 import Link from "next/link";
 import DataRenderer from "@/components/DataRenderer";
 import GetBookmarkedCollection from "@/lib/actions/GetBookmarkedCollection.action";
+import CommonFilters from "@/components/CommonFilters";
+import { CollectionFilters, DefaultFilters } from "@/constants/filter.constant";
+import { Bookmark } from "lucide-react";
 
 export default async function Home({
 	searchParams,
@@ -29,9 +32,13 @@ export default async function Home({
 	return (
 		<div className="p-5 space-y-5">
 			<div className="flex items-center justify-between">
-				<div className="font-bold text-3xl dark:text-blue-600">
+				<h1 className="font-bold text-3xl dark:text-blue-600">
 					Saved Threads
-				</div>
+				</h1>
+				<CommonFilters
+					filters={CollectionFilters}
+					defaultFilter={DefaultFilters.CollectionFilters}
+				/>
 			</div>
 			<Filters />
 			<DataRenderer

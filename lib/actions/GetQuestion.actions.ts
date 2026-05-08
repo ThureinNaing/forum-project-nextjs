@@ -33,10 +33,13 @@ export async function GetQuestion(params: { questionId: string }): Promise<{
 		}
 
 		// Check if the question is bookmarked by the user
-		const collection = await Collection.findOne({
-			question: questionId,
-			author: user._id,
-		});
+		let collection = null;
+		if (user) {
+			collection = await Collection.findOne({
+				question: questionId,
+				author: user._id,
+			});
+		}
 
 		return {
 			success: true,

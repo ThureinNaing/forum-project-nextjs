@@ -1,101 +1,141 @@
 "use server";
 
-import Collection, { ICollectionDocument } from "@/models/collection.model";
+import { PipelineStage } from "mongoose";
 import dbConnect from "../dbConnect";
-import { handleActionErrorResponse } from "../response";
-import validateBody from "../validateBody";
-import PaginatedSearchParamsSchema from "../Schema/PaginatedSearchParamsSchema";
 import { auth } from "@/auth";
-import Question from "@/models/question.model";
-import { FilterQuery } from "mongoose";
+import validateBody from "../validateBody";
+import Collection, { ICollectionDocument } from "@/models/collection.model";
+import PaginatedSearchParamsSchema from "../Schema/PaginatedSearchParamsSchema";
+import { handleActionErrorResponse } from "../response";
 import User from "@/models/user.model";
 
-export default async function GetBookmarkedCollection(params: {
+const getBookMarkCollections = async (params: {
 	page?: number;
 	pageSize?: number;
 	search?: string;
 	filter?: string;
 	sort?: string;
 }): Promise<{
+	data?: {
+		collections: ICollectionDocument[];
+		isNext: boolean;
+	};
 	success: boolean;
-	data?: { collections: ICollectionDocument[]; isNext?: boolean };
 	message?: string;
-	deatils?: object | null;
-}> {
+	details?: object | null;
+}> => {
 	await dbConnect();
 	const auth_session = await auth();
-	const user_eamil = auth_session?.user?.email;
-	try {
-		const user = await User.findOne({ email: user_eamil }).select("_id");
-		const validatedData = validateBody(params, PaginatedSearchParamsSchema);
-		const {
-			page = 1,
-			pageSize = 10,
-			search,
-			filter,
-			// sort,
-		} = validatedData.data;
+	const userId = auth_session?.user?.id;
+	const userEmail = auth_session?.user?.email;
 
-		const skip = (Number(page) - 1) * pageSize;
-		const limit = Number(pageSize);
-
-		const filterQuery: FilterQuery<typeof Collection> = {
-			author: user._id,
+	if (!userId) {
+		return {
+			success: true,
+			data: { collections: [], isNext: false },
 		};
+	}
 
+	const user = await User.findOne({ email: userEmail }).select("_id");
+	const validatedData = validateBody(params, PaginatedSearchParamsSchema);
+
+	let { page = 1, pageSize = 10, search, filter } = validatedData.data;
+
+	const skip = (Number(page) - 1) * pageSize;
+	const limit = Number(pageSize);
+
+	// Define sort options for all filters
+	const sortOptions: Record<string, Record<string, 1 | -1>> = {
+		mostrecent: { "question.createdAt": -1 },
+		oldest: { "question.createdAt": 1 },
+		mostvoted: { "question.upvotes": -1 },
+		mostviewed: { "question.views": -1 },
+		mostanswered: { "question.answers": -1 },
+	};
+
+	const sortCriteria = sortOptions[filter] || sortOptions.mostrecent;
+	/* collection -> {
+    _id : "asdfsafsdf",
+    question : { 
+    _id : "adfasdf", 
+    title: "adfasdfs", 
+    content: "adfasdfs", 
+    author:{_id:"asdfsaf"},
+    tags:[]
+    ]
+   } */
+	try {
+		// Build aggregation pipeline - collection
+		const pipeline: PipelineStage[] = [
+			// Match collections for the current user
+			{
+				$match: { author: user?._id },
+			},
+			// Lookup questions -> join -> collection -> question
+			{
+				$lookup: {
+					from: "questions",
+					localField: "question",
+					foreignField: "_id",
+					as: "question",
+				},
+			},
+			// Unwind question
+			{ $unwind: "$question" },
+			// Lookup author
+			{
+				$lookup: {
+					from: "users",
+					localField: "question.author",
+					foreignField: "_id",
+					as: "question.author",
+				},
+			},
+			// Unwind author
+			{ $unwind: "$question.author" },
+			// Lookup tags
+			{
+				$lookup: {
+					from: "tags",
+					localField: "question.tags",
+					foreignField: "_id",
+					as: "question.tags",
+				},
+			},
+		];
+
+		// Apply search filter if provided
 		if (search) {
-			const matchingQuestions = await Question.find({
-				$or: [
-					{ title: { $regex: search, $options: "i" } },
-					{ content: { $regex: search, $options: "i" } },
-				],
-			}).select("_id");
-			const matchingIdsList = matchingQuestions.map((q) => q._id);
-
-			if (!matchingIdsList.length) {
-				return {
-					success: true,
-					data: { collections: [], isNext: false },
-				};
-			}
-
-			filterQuery.question = { $in: matchingIdsList };
+			pipeline.push({
+				$match: {
+					$or: [
+						{ "question.title": { $regex: search, $options: "i" } },
+						{
+							"question.content": {
+								$regex: search,
+								$options: "i",
+							},
+						},
+					],
+				},
+			});
 		}
 
-		let sortCriteria = {};
+		// Get total count before pagination
+		const [totalCountResult] = await Collection.aggregate([
+			...pipeline,
+			{ $count: "count" },
+		]); // [{count : 10}]
 
-		switch (filter) {
-			case "mostrecent":
-				sortCriteria = { createdAt: -1 };
-				break;
-				2;
-			case "oldest":
-				sortCriteria = { createdAt: -1 };
-				break;
-			case "mostvoted":
-				sortCriteria = { upvotes: -1 };
-				break;
-			case "mostanswered":
-				sortCriteria = { upvotes: -1 };
-				break;
-			default:
-				sortCriteria = { createdAt: -1 };
-				break;
-		}
+		const totalCollections = totalCountResult?.count || 0;
 
-		const totalCollections = await Collection.countDocuments(filterQuery);
-		const collections = await Collection.find(filterQuery)
-			.populate({
-				path: "question",
-				populate: [
-					{ path: "tags", select: "_id name" },
-					{ path: "author", select: "_id name image" },
-				],
-			})
-			.lean()
-			.sort(sortCriteria)
-			.skip(skip)
-			.limit(limit);
+		// Add sorting and pagination &  Execute aggregation
+		const collections = await Collection.aggregate([
+			...pipeline,
+			{ $sort: sortCriteria },
+			{ $skip: skip },
+			{ $limit: limit },
+		]); // []
 
 		const isNext = totalCollections > skip + collections.length;
 
@@ -106,7 +146,9 @@ export default async function GetBookmarkedCollection(params: {
 				isNext,
 			},
 		};
-	} catch (error) {
-		return handleActionErrorResponse(error);
+	} catch (e) {
+		return handleActionErrorResponse(e);
 	}
-}
+};
+
+export default getBookMarkCollections;

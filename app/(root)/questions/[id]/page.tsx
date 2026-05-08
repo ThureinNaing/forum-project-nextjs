@@ -2,7 +2,7 @@ import Preview from "@/components/Preview";
 import TagCard from "@/components/TagCard";
 import { GetQuestion } from "@/lib/actions/GetQuestion.actions";
 import { IncrementViews } from "@/lib/actions/IncrementViews.action";
-import { notFound, useSearchParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import { after } from "next/server";
 import AnswerForm from "../components/AnswerForm";
 import { GetAnswers } from "@/lib/actions/GetAnswers.action";
