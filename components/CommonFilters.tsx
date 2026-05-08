@@ -48,7 +48,7 @@ const CommonFilters = ({
 						key={filter.value}
 						className="cursor-pointer"
 					>
-						{filter.value}
+						{filter.name}
 					</option>
 				))}
 			</select>

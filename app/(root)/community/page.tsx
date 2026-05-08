@@ -28,9 +28,9 @@ export default async function page({
 	return (
 		<div className="p-5 space-y-5">
 			<div className="flex items-center justify-between">
-				<div className="font-bold text-3xl dark:text-blue-600">
+				<h1 className="font-bold text-3xl dark:text-blue-600">
 					All Users
-				</div>
+				</h1>
 			</div>
 			<DataRenderer
 				success={success}

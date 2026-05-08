@@ -1,5 +1,7 @@
+import CommonFilters from "@/components/CommonFilters";
 import DataRenderer from "@/components/DataRenderer";
 import TagInfoCard from "@/components/TagInfoCard";
+import { DefaultFilters, TagFilters } from "@/constants/filter.constant";
 import { GetTags } from "@/lib/actions/GetTags.actions";
 
 export default async function page({
@@ -11,7 +13,7 @@ export default async function page({
 		[key: string]: string; //don't need to specify exact keys
 	}>;
 }) {
-	const { page, pageSize, search, filter } = await searchParams;
+	const { page = 1, pageSize = 10, search, filter } = await searchParams;
 
 	const { success, data, message } = await GetTags({
 		page: Number(page) || 1,
@@ -27,9 +29,14 @@ export default async function page({
 	return (
 		<div className="p-5 space-y-5">
 			<div className="flex items-center justify-between">
-				<div className="font-bold text-3xl dark:text-blue-600">
+				<h1 className="font-bold text-3xl dark:text-blue-600">
 					All Tags
-				</div>
+				</h1>
+
+				<CommonFilters
+					filters={TagFilters}
+					defaultFilter={DefaultFilters.TagFilters}
+				/>
 			</div>
 			<DataRenderer
 				success={success}
