@@ -2,6 +2,8 @@ import DataRenderer from "@/components/DataRenderer";
 
 import GetUsersAction from "@/lib/actions/GetUsers.action";
 import UserCard from "./components/UserCard";
+import CommonFilters from "@/components/CommonFilters";
+import { DefaultFilters, UserFilters } from "@/constants/filter.constant";
 
 export default async function page({
 	searchParams,
@@ -12,7 +14,7 @@ export default async function page({
 		[key: string]: string; //don't need to specify exact keys
 	}>;
 }) {
-	const { page, pageSize, search, filter } = await searchParams;
+	const { page = 1, pageSize = 10, search, filter } = await searchParams;
 
 	const { success, data, message } = await GetUsersAction({
 		page: Number(page) || 1,
@@ -31,6 +33,11 @@ export default async function page({
 				<h1 className="font-bold text-3xl dark:text-blue-600">
 					All Users
 				</h1>
+
+				<CommonFilters
+					filters={UserFilters}
+					defaultFilter={DefaultFilters.UserFilters}
+				/>
 			</div>
 			<DataRenderer
 				success={success}
