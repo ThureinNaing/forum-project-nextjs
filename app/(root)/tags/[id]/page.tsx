@@ -1,6 +1,7 @@
 import ThreadCard from "@/components/ThreadCard";
 import DataRenderer from "@/components/DataRenderer";
 import GetTagQuestion from "@/lib/actions/GetTagQuestions";
+import Pagination from "@/components/Pagination";
 
 export default async function page({
 	params,
@@ -25,7 +26,7 @@ export default async function page({
 
 	// const user = await auth();
 
-	const { questions = [], tag } = data || {};
+	const { questions = [], tag, isNext = false } = data || {};
 
 	return (
 		<div className="p-5 space-y-5">
@@ -45,6 +46,7 @@ export default async function page({
 					))
 				}
 			/>
+			<Pagination isNext={isNext} page={page} />
 		</div>
 	);
 }

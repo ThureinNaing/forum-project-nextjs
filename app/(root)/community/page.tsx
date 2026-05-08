@@ -4,6 +4,7 @@ import GetUsersAction from "@/lib/actions/GetUsers.action";
 import UserCard from "./components/UserCard";
 import CommonFilters from "@/components/CommonFilters";
 import { DefaultFilters, UserFilters } from "@/constants/filter.constant";
+import Pagination from "@/components/Pagination";
 
 export default async function page({
 	searchParams,
@@ -25,7 +26,7 @@ export default async function page({
 
 	// const user = await auth();
 
-	const { users = [] } = data || {};
+	const { users = [], isNext = false } = data || {};
 
 	return (
 		<div className="p-5 space-y-5">
@@ -60,6 +61,7 @@ export default async function page({
 					);
 				}}
 			/>
+			<Pagination isNext={isNext} page={page} />
 		</div>
 	);
 }

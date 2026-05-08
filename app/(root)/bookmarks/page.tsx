@@ -8,6 +8,7 @@ import GetBookmarkedCollection from "@/lib/actions/GetBookmarkedCollection.actio
 import CommonFilters from "@/components/CommonFilters";
 import { CollectionFilters, DefaultFilters } from "@/constants/filter.constant";
 import { Bookmark } from "lucide-react";
+import Pagination from "@/components/Pagination";
 
 export default async function Home({
 	searchParams,
@@ -27,7 +28,7 @@ export default async function Home({
 		filter: filter || "",
 	});
 
-	const { collections = [] } = data || {};
+	const { collections = [], isNext = false } = data || {};
 
 	return (
 		<div className="p-5 space-y-5">
@@ -54,6 +55,7 @@ export default async function Home({
 					))
 				}
 			/>
+			<Pagination isNext={isNext} page={page} />
 		</div>
 	);
 }

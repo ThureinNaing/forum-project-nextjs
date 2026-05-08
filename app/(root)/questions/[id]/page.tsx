@@ -9,6 +9,7 @@ import { GetAnswers } from "@/lib/actions/GetAnswers.action";
 import AnswerList from "../components/AnswerList";
 import VoteButtons from "../components/VoteButtons";
 import ToggleBookmark from "../components/ToggleBookmark";
+import Pagination from "@/components/Pagination";
 
 async function page({
 	params,
@@ -41,7 +42,7 @@ async function page({
 		questionId: id,
 	});
 
-	const { answers = [], totalAnswers = 0 } = answersData || {};
+	const { answers = [], totalAnswers = 0, isNext = false } = answersData || {};
 
 	return (
 		<div className="p-3">
@@ -80,6 +81,7 @@ async function page({
 					success={success}
 					errorMessage={answerErrorMsg}
 				/>
+				<Pagination isNext={isNext} page={page} />
 			</div>
 
 			<div className="my-3">

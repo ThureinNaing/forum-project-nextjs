@@ -3,6 +3,7 @@ import DataRenderer from "@/components/DataRenderer";
 import TagInfoCard from "@/components/TagInfoCard";
 import { DefaultFilters, TagFilters } from "@/constants/filter.constant";
 import { GetTags } from "@/lib/actions/GetTags.actions";
+import Pagination from "@/components/Pagination";
 
 export default async function page({
 	searchParams,
@@ -24,7 +25,7 @@ export default async function page({
 
 	// const user = await auth();
 
-	const { tags = [] } = data || {};
+	const { tags = [], isNext = false } = data || {};
 
 	return (
 		<div className="p-5 space-y-5">
@@ -59,6 +60,7 @@ export default async function page({
 					);
 				}}
 			/>
+			<Pagination isNext={isNext} page={page} />
 		</div>
 	);
 }
