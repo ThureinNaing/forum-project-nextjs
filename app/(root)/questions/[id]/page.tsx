@@ -2,7 +2,7 @@ import Preview from "@/components/Preview";
 import TagCard from "@/components/TagCard";
 import { GetQuestion } from "@/lib/actions/GetQuestion.actions";
 import { IncrementViews } from "@/lib/actions/IncrementViews.action";
-import { notFound } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import { after } from "next/server";
 import AnswerForm from "../components/AnswerForm";
 import { GetAnswers } from "@/lib/actions/GetAnswers.action";
@@ -10,8 +10,16 @@ import AnswerList from "../components/AnswerList";
 import VoteButtons from "../components/VoteButtons";
 import ToggleBookmark from "../components/ToggleBookmark";
 
-async function page({ params }: { params: Promise<{ id: string }> }) {
+async function page({
+	params,
+	searchParams,
+}: {
+	params: Promise<{ id: string }>;
+	searchParams: Promise<{ [key: string]: string }>;
+}) {
 	const { id } = await params;
+	const { page = 1, pageSize = 10, filter } = await searchParams;
+
 	const { data: question } = await GetQuestion({
 		questionId: id,
 	});
@@ -27,9 +35,9 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
 		data: answersData,
 		message: answerErrorMsg,
 	} = await GetAnswers({
-		page: 1,
-		pageSize: 10,
-		filter: "latest",
+		page: Number(page),
+		pageSize: Number(pageSize),
+		filter: filter as string,
 		questionId: id,
 	});
 
