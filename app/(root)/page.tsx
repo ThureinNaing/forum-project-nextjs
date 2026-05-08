@@ -10,6 +10,7 @@ import {
 	DefaultFilters,
 	HomePageFilters,
 } from "../../constants/filter.constant";
+import Pagination from "@/components/Pagination";
 
 export default async function Home({
 	searchParams,
@@ -20,7 +21,7 @@ export default async function Home({
 		[key: string]: string; //don't need to specify exact keys
 	}>;
 }) {
-	const { page, pageSize, search, filter } = await searchParams;
+	const { page = 1, pageSize = 10, search, filter } = await searchParams;
 
 	const { success, data, message } = await GetAllQuestions({
 		page: Number(page) || 1,
@@ -31,7 +32,7 @@ export default async function Home({
 
 	// const user = await auth();
 
-	const { questions = [] } = data || {};
+	const { questions = [], isNext = false } = data || {};
 
 	return (
 		<div className="p-5 space-y-5">
@@ -61,6 +62,7 @@ export default async function Home({
 					))
 				}
 			/>
+			<Pagination isNext={isNext} page={page} />
 		</div>
 	);
 }
