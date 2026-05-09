@@ -8,5 +8,6 @@ const ROUTES = {
 	TAGS: "/tags",
 	COMMUNITY: "/community",
 	BOOKMARKS: "/bookmarks",
+	PROFILE: (email: string | undefined | null) => "/profile/" + email,
 };
 export default ROUTES;

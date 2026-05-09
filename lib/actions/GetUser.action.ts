@@ -9,7 +9,7 @@ import Question from "@/models/question.model";
 import Answer from "@/models/answer.model";
 
 export default async function GetUserAction(params: {
-	userId: string;
+	email: string;
 }): Promise<{
 	success: boolean;
 	data?: {
@@ -23,8 +23,10 @@ export default async function GetUserAction(params: {
 	await dbConnect();
 	try {
 		const validatedData = validateBody(params, GetUserSchema);
-		const { userId } = validatedData.data;
-		const user = await User.findById(userId).select("-password").exec();
+		const { email } = validatedData.data;
+		const user = await User.findOne({ email: email })
+			.select("-password")
+			.exec();
 		if (!user) throw new Error("User not found");
 
 		const [totalQuestions, totalAnswers] = await Promise.all([

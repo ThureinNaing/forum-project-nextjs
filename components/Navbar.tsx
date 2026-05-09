@@ -28,15 +28,17 @@ const Navbar = async () => {
 
 			<div className="flex justify-between items-center gap-2 md:gap-5">
 				{user && (
-					<Avatar>
-						<AvatarImage
-							src={user?.image ?? undefined}
-							alt={user?.name ?? undefined}
-							width={38}
-							height={38}
-							className="rounded-full"
-						/>
-					</Avatar>
+					<Link href={ROUTES.PROFILE(user.email)}>
+						<Avatar>
+							<AvatarImage
+								src={user?.image ?? undefined}
+								alt={user?.name ?? undefined}
+								width={38}
+								height={38}
+								className="rounded-full"
+							/>
+						</Avatar>
+					</Link>
 				)}
 
 				{!user && (
