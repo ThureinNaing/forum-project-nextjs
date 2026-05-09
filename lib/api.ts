@@ -1,6 +1,8 @@
 import fetchHandler from "./fetchHandler";
 
-const API_URL = "http://localhost:3000/api";
+// const API_URL = "http://localhost:3000/api";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
 
 export const api = {
 	users: {
@@ -33,7 +35,7 @@ export const api = {
 				email?: string;
 				username?: string;
 				image?: string;
-			}
+			},
 		) =>
 			fetchHandler(API_URL + `/users/${id}`, {
 				method: "PUT",
@@ -77,7 +79,7 @@ export const api = {
 				password?: string;
 				provider?: string;
 				providerAccountId?: string;
-			}
+			},
 		) =>
 			fetchHandler(API_URL + `/accounts/${id}`, {
 				method: "PUT",
