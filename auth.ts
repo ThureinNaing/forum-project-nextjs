@@ -6,6 +6,7 @@ import { api } from "./lib/api";
 import validateBody from "./lib/validateBody";
 import SignInSchema from "./lib/Schema/SignInSchema";
 import bcrypt from "bcryptjs";
+import { GetAccountByProviderAction } from "./lib/actions/GetAccountByProvider.action";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
 	providers: [
@@ -15,31 +16,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			authorize: async (credentials) => {
 				const validationFields = validateBody(
 					credentials,
-					SignInSchema
+					SignInSchema,
 				);
 
 				if (validationFields.success) {
 					const { email, password } = validationFields.data;
 
-					const { data: existingAccount } =
-						await api.accounts?.getByProvider(email);
+					// const { data: existingAccount } =
+					// 	await api.accounts?.getByProvider(email);
+					const existingAccount =
+						await GetAccountByProviderAction(email);
 
 					if (!existingAccount) return null;
 
 					const { data: existingUser } = await api.users.getById(
-						existingAccount.userId.toString()
+						existingAccount.userId.toString(),
 					);
 
 					if (!existingUser) return null;
 
 					const isValidPassowrd = await bcrypt.compare(
 						password,
-						existingAccount.password
+						existingAccount.password,
 					);
 
 					if (isValidPassowrd) {
 						return {
-							id: existingUser.id,
+							id: existingUser._id,
 							name: existingUser.name,
 							username: existingUser.username,
 							email: existingUser.email,
@@ -77,7 +80,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			if (account) {
 				const { success, data: accountData } =
 					await api.accounts?.getByProvider(
-						account?.providerAccountId
+						account?.providerAccountId,
 					);
 				if (!success || !accountData) return token;
 				const userId = accountData.id;
