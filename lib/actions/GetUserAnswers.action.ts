@@ -7,7 +7,7 @@ import GetUserAnswersSchema from "../Schema/GetUserAnswersSchema";
 import validateBody from "../validateBody";
 
 export default async function GetUserAnswersAction(params: {
-	userId: string;
+	userId: object | string;
 	page?: number;
 	pageSize?: number;
 }): Promise<{
@@ -28,7 +28,7 @@ export default async function GetUserAnswersAction(params: {
 			author: userId,
 		});
 		const answers = await Answer.find({ author: userId })
-			.populate("author", "_id name email")
+			.populate("author", "_id name email image")
 			.populate("question", "_id  title")
 			.sort({ createdAt: -1 })
 			.skip(skip)

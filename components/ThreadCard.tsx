@@ -13,8 +13,16 @@ import Link from "next/link";
 import ROUTES from "@/routes";
 import type { QuestionCard } from "@/types/question";
 import { getTimeStamp } from "@/lib/utils";
+import Image from "next/image";
 
 const ThreadCard = ({ question }: { question: QuestionCard }) => {
+	const authorName =
+		((question as any)?.author?.name as string) || "Anonymous";
+
+	// const upvotes = (answer as any)?.upvotes ?? 0;
+	// const downvotes = (answer as any)?.downvotes ?? 0;
+
+	const initial = authorName?.charAt(0)?.toUpperCase?.() || "?";
 	return (
 		<Card className="bg-gray-200 dark:bg-[#081338] shadow-md dark:shadow-blue-900 mb-5 cursor-pointer">
 			<CardHeader>
@@ -38,7 +46,19 @@ const ThreadCard = ({ question }: { question: QuestionCard }) => {
 			</CardContent>
 			<CardFooter className="flex justify-between items-center">
 				<div className="flex justify-between items-center gap-3">
-					<User />
+					{question?.author?.image ? (
+						<Image
+							src={question.author.image}
+							alt={authorName}
+							className="rounded-full"
+							width={36}
+							height={36}
+						/>
+					) : (
+						<div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+							{initial}
+						</div>
+					)}
 					<span>
 						{question.author.name}, asked{" "}
 						{getTimeStamp(question.createdAt)}

@@ -8,7 +8,7 @@ import Question from "@/models/question.model";
 import { QuestionCard } from "@/types/question";
 
 export default async function GetUserQuestionsAction(params: {
-	userId: string;
+	userId: Object | string;
 	page?: number;
 	pageSize?: number;
 }): Promise<{
@@ -30,7 +30,7 @@ export default async function GetUserQuestionsAction(params: {
 		});
 		const questions = await Question.find({ author: userId })
 			.populate("tags", "name")
-			.populate("author", "name email")
+			.populate("author", "name email image")
 			.sort({ createdAt: -1 })
 			.skip(skip)
 			.limit(limit);
