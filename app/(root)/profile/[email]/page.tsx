@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import GetUserAction from "@/lib/actions/GetUser.action";
+import ProfileHeader from "@/components/ProfileHeader";
+import StatsCard from "@/components/StatsCard";
 
 const ProfilePage = async ({
 	params,
@@ -24,10 +26,9 @@ const ProfilePage = async ({
 	const userMail = (await params).email;
 	const decodedEmail = decodeURIComponent(userMail);
 
-	const userResult = await GetUserAction({ email: decodedEmail });
-	console.log("User Result:", userResult); // Debug log
+	const users = await GetUserAction({ email: decodedEmail });
 
-	if (!userResult.success || !userResult.data) {
+	if (!users.success || !users.data) {
 		return (
 			<div className="container mx-auto px-4 py-16">
 				<div className="max-w-2xl mx-auto text-center">
@@ -106,136 +107,17 @@ const ProfilePage = async ({
 		);
 	}
 
-	const { user, totalQuestions, totalAnswers } = userResult.data;
+	const { user, totalQuestions, totalAnswers } = users.data;
 
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<div className="max-w-4xl mx-auto">
-				{/* Profile Header Card */}
-				<Card className="mb-8">
-					<CardContent className="pt-6">
-						<div className="flex flex-col md:flex-row gap-6">
-							{/* Avatar Section */}
-							<div className="flex flex-col items-center md:items-start">
-								<Avatar className="w-32 h-32">
-									<AvatarImage
-										src={user.image}
-										alt={user.name}
-									/>
-									<AvatarFallback className="text-2xl">
-										{user.name.charAt(0).toUpperCase()}
-									</AvatarFallback>
-								</Avatar>
-							</div>
+				<ProfileHeader user={user} />
 
-							{/* User Info Section */}
-							<div className="flex-1 space-y-4">
-								<div>
-									<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-										{user.name}
-									</h1>
-									<p className="text-lg text-gray-600 dark:text-gray-400">
-										@{user.username}
-									</p>
-								</div>
-
-								{/* Reputation Badge */}
-								{user.reputation !== undefined && (
-									<div className="flex items-center gap-2">
-										<Trophy className="w-5 h-5 text-yellow-500" />
-										<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground">
-											{user.reputation} reputation
-										</span>
-									</div>
-								)}
-
-								{/* Bio */}
-								{user.bio && (
-									<p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-										{user.bio}
-									</p>
-								)}
-
-								{/* Contact Info */}
-								<div className="space-y-2">
-									<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-										<Mail className="w-4 h-4" />
-										<span>{user.email}</span>
-									</div>
-
-									{user.location && (
-										<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-											<MapPin className="w-4 h-4" />
-											<span>{user.location}</span>
-										</div>
-									)}
-
-									{user.portfolio && (
-										<div className="flex items-center gap-2 text-sm">
-											<LinkIcon className="w-4 h-4" />
-											<a
-												href={user.portfolio}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-											>
-												{user.portfolio}
-											</a>
-										</div>
-									)}
-								</div>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-
-				{/* Stats Cards */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-					<Card>
-						<CardHeader className="pb-3">
-							<CardTitle className="text-lg">
-								Questions Asked
-							</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="text-3xl font-bold text-blue-600">
-								{totalQuestions}
-							</div>
-							<p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-								Total questions posted
-							</p>
-						</CardContent>
-					</Card>
-
-					<Card>
-						<CardHeader className="pb-3">
-							<CardTitle className="text-lg">
-								Answers Given
-							</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="text-3xl font-bold text-green-600">
-								{totalAnswers}
-							</div>
-							<p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-								Total answers provided
-							</p>
-						</CardContent>
-					</Card>
-				</div>
-
-				{/* Activity Section Placeholder */}
-				<Card>
-					<CardHeader>
-						<CardTitle>Recent Activity</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p className="text-gray-600 dark:text-gray-400">
-							Activity feed will be implemented here. This could
-							include recent questions, answers, and interactions.
-						</p>
-					</CardContent>
-				</Card>
+				<StatsCard
+					totalAnswers={totalAnswers}
+					totalQuestions={totalQuestions}
+				/>
 			</div>
 		</div>
 	);
