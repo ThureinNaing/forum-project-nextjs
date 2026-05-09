@@ -1,13 +1,9 @@
 import Filters from "@/components/Filters";
 import ThreadCard from "@/components/ThreadCard";
-import { Button } from "@/components/ui/button";
-import ROUTES from "@/routes";
-import Link from "next/link";
 import DataRenderer from "@/components/DataRenderer";
 import GetBookmarkedCollection from "@/lib/actions/GetBookmarkedCollection.action";
 import CommonFilters from "@/components/CommonFilters";
 import { CollectionFilters, DefaultFilters } from "@/constants/filter.constant";
-import { Bookmark } from "lucide-react";
 import Pagination from "@/components/Pagination";
 
 export default async function Home({

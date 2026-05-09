@@ -18,7 +18,7 @@ interface AnswerCardProps {
 }
 
 function AnswerCard({ answer }: AnswerCardProps) {
-	const authorName = ((answer as any)?.author?.name as string) || "Anonymous";
+	const authorName = (answer?.author?.name as string) || "Anonymous";
 	// const upvotes = (answer as any)?.upvotes ?? 0;
 	// const downvotes = (answer as any)?.downvotes ?? 0;
 

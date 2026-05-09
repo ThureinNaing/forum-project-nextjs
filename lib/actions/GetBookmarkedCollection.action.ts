@@ -39,7 +39,7 @@ const getBookMarkCollections = async (params: {
 	const user = await User.findOne({ email: userEmail }).select("_id");
 	const validatedData = validateBody(params, PaginatedSearchParamsSchema);
 
-	let { page = 1, pageSize = 10, search, filter } = validatedData.data;
+	const { page = 1, pageSize = 10, search, filter } = validatedData.data;
 
 	const skip = (Number(page) - 1) * pageSize;
 	const limit = Number(pageSize);

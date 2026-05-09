@@ -1,16 +1,6 @@
-import { notFound } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-	MapPin,
-	Link as LinkIcon,
-	Mail,
-	Trophy,
-	UserX,
-	ArrowLeft,
-	Search,
-} from "lucide-react";
+import { UserX, ArrowLeft, Search } from "lucide-react";
 import Link from "next/link";
 import GetUserAction from "@/lib/actions/GetUser.action";
 import ProfileHeader from "@/components/ProfileHeader";
@@ -57,8 +47,9 @@ const ProfilePage = async ({
 										User Not Found
 									</h1>
 									<p className="text-lg text-gray-600 dark:text-gray-400 max-w-md">
-										The user you're looking for doesn't
-										exist or may have been removed.
+										The user you&apos;re looking for
+										doesn&apos;t exist or may have been
+										removed.
 									</p>
 								</div>
 

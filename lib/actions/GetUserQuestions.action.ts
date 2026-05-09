@@ -8,7 +8,7 @@ import Question from "@/models/question.model";
 import { QuestionCard } from "@/types/question";
 
 export default async function GetUserQuestionsAction(params: {
-	userId: Object | string;
+	userId: object | string;
 	page?: number;
 	pageSize?: number;
 }): Promise<{

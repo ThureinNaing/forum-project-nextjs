@@ -6,7 +6,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 
-import { Eye, MessageCircle, ThumbsUp, User } from "lucide-react";
+import { Eye, MessageCircle, ThumbsUp } from "lucide-react";
 
 import TagCard from "./TagCard";
 import Link from "next/link";
@@ -16,8 +16,7 @@ import { getTimeStamp } from "@/lib/utils";
 import Image from "next/image";
 
 const ThreadCard = ({ question }: { question: QuestionCard }) => {
-	const authorName =
-		((question as any)?.author?.name as string) || "Anonymous";
+	const authorName = (question?.author?.name as string) || "Anonymous";
 
 	// const upvotes = (answer as any)?.upvotes ?? 0;
 	// const downvotes = (answer as any)?.downvotes ?? 0;

@@ -4,12 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const UserCard = ({
-	id,
+	// id,
 	email,
 	name,
 	image,
 }: {
-	id: string;
+	// id: string;
 	email: string;
 	name: string;
 	image: string;

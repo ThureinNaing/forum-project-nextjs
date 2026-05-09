@@ -10,7 +10,7 @@ import {
 	Globe,
 	HomeIcon,
 	MessageCircleCodeIcon,
-	NewspaperIcon,
+	// NewspaperIcon,
 	TagIcon,
 } from "lucide-react";
 
