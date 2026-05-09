@@ -9,7 +9,7 @@ const UserCard = ({
 	name,
 	image,
 }: {
-	// id: string;
+	// id?: string;
 	email: string;
 	name: string;
 	image: string;

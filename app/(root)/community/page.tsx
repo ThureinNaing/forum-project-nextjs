@@ -51,7 +51,7 @@ export default async function page({
 								return (
 									<UserCard
 										key={index}
-										id={user._id.toString()}
+										// id={user._id.toString()}
 										email={user.email}
 										name={user.name}
 										image={user.image}
