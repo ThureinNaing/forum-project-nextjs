@@ -8,7 +8,7 @@ const Pagination = ({
 	isNext,
 	page = 1,
 }: {
-	isNext: boolean;
+	isNext: boolean | undefined;
 	page: number | string;
 }) => {
 	page = Number(page);

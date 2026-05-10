@@ -10,6 +10,7 @@ import ThreadCard from "@/components/ThreadCard";
 import GetUserQuestionsAction from "@/lib/actions/GetUserQuestions.action";
 import GetUserAnswersAction from "@/lib/actions/GetUserAnswers.action";
 import AnswerCard from "../../questions/components/AnswerCard";
+import Pagination from "@/components/Pagination";
 
 const ProfilePage = async ({
 	params,
@@ -19,15 +20,23 @@ const ProfilePage = async ({
 		email: string;
 	}>;
 	searchParams: Promise<{
-		tab?: string;
+		// tab?: string;
+		// page?: number;
+		[key: string]: string;
 	}>;
 }) => {
 	const userMail = (await params).email;
 	const decodedEmail = decodeURIComponent(userMail);
-	const activeTab = (await searchParams).tab || "questions";
-	let success = false;
-	let data = null;
-	let message = null;
+	const {
+		page = 1,
+		pageSize = 10,
+		activeTab = "questions",
+	} = await searchParams;
+
+	let success;
+	let data;
+	let message;
+	let isNext: boolean | undefined = false;
 
 	const users = await GetUserAction({ email: decodedEmail });
 
@@ -120,14 +129,15 @@ const ProfilePage = async ({
 			message: questionMsg,
 		} = await GetUserQuestionsAction({
 			userId: users?.data?.user?._id || "",
-			page: 1,
-			pageSize: 10,
+			page: Number(page) || 1,
+			pageSize: Number(pageSize) || 10,
 		});
 
 		// const { questions = [] } = data || {};
 		success = questinSuccess;
 		data = questionsData!.questions;
 		message = questionMsg;
+		isNext = questionsData!.isNext;
 	} else {
 		const {
 			success: answerSuccess,
@@ -135,14 +145,15 @@ const ProfilePage = async ({
 			message: answerMessage,
 		} = await GetUserAnswersAction({
 			userId: users?.data?.user?._id || "",
-			page: 1,
-			pageSize: 10,
+			page: Number(page) || 1,
+			pageSize: Number(pageSize) || 10,
 		});
 
 		// const { answers = [] } = answerData || {};
 		success = answerSuccess;
 		data = answerData!.answers;
 		message = answerMessage;
+		isNext = answerData?.isNext;
 	}
 
 	return (
@@ -172,28 +183,39 @@ const ProfilePage = async ({
 
 				{activeTab === "questions" ? (
 					// user's questions
-					<DataRenderer
-						success={success}
-						data={data}
-						errorMessage={message}
-						render={(questions) =>
-							questions.map((question, index) => (
-								<ThreadCard question={question} key={index} />
-							))
-						}
-					/>
+					<>
+						{" "}
+						<DataRenderer
+							success={success}
+							data={data}
+							errorMessage={message}
+							render={(questions) =>
+								questions.map((question, index) => (
+									<ThreadCard
+										question={question}
+										key={index}
+									/>
+								))
+							}
+						/>
+						<Pagination isNext={isNext} page={Number(page)} />
+					</>
 				) : (
 					// user's answers
-					<DataRenderer
-						success={success}
-						data={data}
-						errorMessage={message}
-						render={(questions) =>
-							questions.map((answer, index) => (
-								<AnswerCard answer={answer} key={index} />
-							))
-						}
-					/>
+					<>
+						{" "}
+						<DataRenderer
+							success={success}
+							data={data}
+							errorMessage={message}
+							render={(questions) =>
+								questions.map((answer, index) => (
+									<AnswerCard answer={answer} key={index} />
+								))
+							}
+						/>
+						<Pagination isNext={isNext} page={Number(page)} />
+					</>
 				)}
 			</div>
 		</div>
