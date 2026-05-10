@@ -154,7 +154,7 @@ const RegisterForm = () => {
 					/>
 
 					<Button type="submit" className="w-full">
-						Login
+						Register
 					</Button>
 					<AuthForm />
 					<div className="flex items-center justify-start gap-2 ">
