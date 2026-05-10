@@ -1,6 +1,5 @@
 import React from "react";
 import { ModeToggle } from "@/components/dark-light";
-
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
@@ -11,7 +10,6 @@ import { Button } from "./ui/button";
 import { auth, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
-import Image from "next/image";
 
 const Navbar = async () => {
 	const session = await auth();

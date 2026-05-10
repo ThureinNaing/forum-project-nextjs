@@ -76,14 +76,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			return success;
 		},
 		//add user id to the JWT token
-		async jwt({ token, account }) {
+		async jwt({ token, account, user }) {
+			if (user) {
+				//this means it's the first time the user is signing in, so we need to add the user id to the token
+				token.sub = user.id;
+			}
 			if (account) {
 				const { success, data: accountData } =
 					await api.accounts?.getByProvider(
 						account?.providerAccountId,
 					);
 				if (!success || !accountData) return token;
-				const userId = accountData.id;
+				const userId = accountData.userId;
 
 				if (userId) token.sub = userId;
 			}

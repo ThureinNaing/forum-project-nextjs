@@ -14,8 +14,15 @@ import ROUTES from "@/routes";
 import type { QuestionCard } from "@/types/question";
 import { getTimeStamp } from "@/lib/utils";
 import Image from "next/image";
+import ActionButtons from "./ActionButtons";
 
-const ThreadCard = ({ question }: { question: QuestionCard }) => {
+const ThreadCard = ({
+	question,
+	showActions = false,
+}: {
+	question: QuestionCard;
+	showActions?: boolean;
+}) => {
 	const authorName = (question?.author?.name as string) || "Anonymous";
 
 	// const upvotes = (answer as any)?.upvotes ?? 0;
@@ -74,6 +81,11 @@ const ThreadCard = ({ question }: { question: QuestionCard }) => {
 					<div className="flex justify-between items-center gap-1 cursor-pointer">
 						<Eye size={16} /> <span>{question.views}</span>
 					</div>
+					<ActionButtons
+						type="question"
+						typeId={question._id.toString()}
+						showActions={showActions}
+					/>
 				</div>
 			</CardFooter>
 		</Card>

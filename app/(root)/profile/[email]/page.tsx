@@ -11,6 +11,7 @@ import GetUserQuestionsAction from "@/lib/actions/GetUserQuestions.action";
 import GetUserAnswersAction from "@/lib/actions/GetUserAnswers.action";
 import AnswerCard from "../../questions/components/AnswerCard";
 import Pagination from "@/components/Pagination";
+import { auth } from "@/auth";
 
 const ProfilePage = async ({
 	params,
@@ -25,12 +26,13 @@ const ProfilePage = async ({
 		[key: string]: string;
 	}>;
 }) => {
+	const user_session = await auth();
 	const userMail = (await params).email;
 	const decodedEmail = decodeURIComponent(userMail);
 	const {
 		page = 1,
 		pageSize = 10,
-		activeTab = "questions",
+		tab: activeTab = "questions",
 	} = await searchParams;
 
 	let success;
@@ -194,6 +196,10 @@ const ProfilePage = async ({
 									<ThreadCard
 										question={question}
 										key={index}
+										showActions={
+											user_session?.user?.id ===
+											question.author._id.toString()
+										}
 									/>
 								))
 							}
@@ -210,7 +216,14 @@ const ProfilePage = async ({
 							errorMessage={message}
 							render={(questions) =>
 								questions.map((answer, index) => (
-									<AnswerCard answer={answer} key={index} />
+									<AnswerCard
+										answer={answer}
+										key={index}
+										showActions={
+											user_session?.user?.id ===
+											answer.author._id.toString()
+										}
+									/>
 								))
 							}
 						/>

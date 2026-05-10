@@ -4,6 +4,7 @@ import React from "react";
 import VoteButtons from "./VoteButtons";
 import { getTimeStamp } from "@/lib/utils";
 import Image from "next/image";
+import ActionButtons from "@/components/ActionButtons";
 
 interface IAnswerWithPopulatedAuthor extends Omit<IAnswerDocument, "author"> {
 	author: {
@@ -15,9 +16,10 @@ interface IAnswerWithPopulatedAuthor extends Omit<IAnswerDocument, "author"> {
 
 interface AnswerCardProps {
 	answer: IAnswerWithPopulatedAuthor;
+	showActions?: boolean;
 }
 
-function AnswerCard({ answer }: AnswerCardProps) {
+function AnswerCard({ answer, showActions = false }: AnswerCardProps) {
 	const authorName = (answer?.author?.name as string) || "Anonymous";
 	// const upvotes = (answer as any)?.upvotes ?? 0;
 	// const downvotes = (answer as any)?.downvotes ?? 0;
@@ -60,6 +62,11 @@ function AnswerCard({ answer }: AnswerCardProps) {
 					typeId={answer?._id.toString()}
 					initialUpvotes={answer.upvotes}
 					initialDownvotes={answer.downvotes}
+				/>
+				<ActionButtons
+					type="answer"
+					typeId={answer._id.toString()}
+					showActions={showActions}
 				/>
 			</footer>
 		</article>
