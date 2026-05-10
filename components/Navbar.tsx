@@ -11,10 +11,15 @@ import { Button } from "./ui/button";
 import { auth, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
+import Image from "next/image";
 
 const Navbar = async () => {
 	const session = await auth();
 	const user = session?.user;
+	// const upvotes = (answer as any)?.upvotes ?? 0;
+	// const downvotes = (answer as any)?.downvotes ?? 0;
+
+	const initial = user?.name?.charAt(0)?.toUpperCase?.();
 	return (
 		<nav className="flex justify-between items-center mx-3 md:mx-0 md:px-5  py-4">
 			<div className="font-bold flex items-center justify-center cursor-pointer">
@@ -29,15 +34,21 @@ const Navbar = async () => {
 			<div className="flex justify-between items-center gap-2 md:gap-5">
 				{user && (
 					<Link href={ROUTES.PROFILE(user.email)}>
-						<Avatar>
-							<AvatarImage
-								src={user?.image ?? undefined}
-								alt={user?.name ?? undefined}
-								width={38}
-								height={38}
-								className="rounded-full"
-							/>
-						</Avatar>
+						{user?.image ? (
+							<Avatar>
+								<AvatarImage
+									src={user?.image ?? undefined}
+									alt={user?.name ?? undefined}
+									width={38}
+									height={38}
+									className="rounded-full"
+								/>
+							</Avatar>
+						) : (
+							<div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+								{initial}
+							</div>
+						)}
 					</Link>
 				)}
 
