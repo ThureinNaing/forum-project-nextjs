@@ -5,6 +5,9 @@ import GetBookmarkedCollection from "@/lib/actions/GetBookmarkedCollection.actio
 import CommonFilters from "@/components/CommonFilters";
 import { CollectionFilters, DefaultFilters } from "@/constants/filter.constant";
 import Pagination from "@/components/Pagination";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import ROUTES from "@/routes";
 
 export default async function Home({
 	searchParams,
@@ -15,6 +18,11 @@ export default async function Home({
 		[key: string]: string; //don't need to specify exact keys
 	}>;
 }) {
+	const session = await auth();
+	if (!session?.user) {
+		redirect(ROUTES.LOGIN);
+	}
+
 	const { page, pageSize, search, filter } = await searchParams;
 
 	const { success, data, message } = await GetBookmarkedCollection({
