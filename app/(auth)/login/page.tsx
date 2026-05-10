@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -19,10 +19,27 @@ import AuthForm from "../components/authForm";
 import ROUTES from "@/routes";
 import { signInWithCredentials } from "@/lib/actions/SignInWithCredentials.actions";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Login = () => {
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
+	const { data: session, status } = useSession();
+
+	useEffect(() => {
+		if (status === "authenticated") {
+			router.replace(ROUTES.HOME);
+		}
+	}, [status, router]);
+
+	if (status === "loading") {
+		return null;
+	}
+
+	if (session) {
+		return null;
+	}
+
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
