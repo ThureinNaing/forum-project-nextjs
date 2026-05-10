@@ -24,7 +24,10 @@ const ProfilePage = async ({
 }) => {
 	const userMail = (await params).email;
 	const decodedEmail = decodeURIComponent(userMail);
-	const activeTab = (await searchParams).tab;
+	const activeTab = (await searchParams).tab || "questions";
+	let success = false;
+	let data = null;
+	let message = null;
 
 	const users = await GetUserAction({ email: decodedEmail });
 
@@ -110,25 +113,37 @@ const ProfilePage = async ({
 
 	const { user, totalQuestions, totalAnswers } = users.data;
 
-	const { success, data, message } = await GetUserQuestionsAction({
-		userId: users?.data?.user?._id || "",
-		page: 1,
-		pageSize: 10,
-	});
+	if (activeTab === "questions") {
+		const {
+			success: questinSuccess,
+			data: questionsData,
+			message: questionMsg,
+		} = await GetUserQuestionsAction({
+			userId: users?.data?.user?._id || "",
+			page: 1,
+			pageSize: 10,
+		});
 
-	const { questions = [] } = data || {};
+		// const { questions = [] } = data || {};
+		success = questinSuccess;
+		data = questionsData!.questions;
+		message = questionMsg;
+	} else {
+		const {
+			success: answerSuccess,
+			data: answerData,
+			message: answerMessage,
+		} = await GetUserAnswersAction({
+			userId: users?.data?.user?._id || "",
+			page: 1,
+			pageSize: 10,
+		});
 
-	const {
-		success: answerSuccess,
-		data: answerData,
-		message: answerMessage,
-	} = await GetUserAnswersAction({
-		userId: users?.data?.user?._id || "",
-		page: 1,
-		pageSize: 10,
-	});
-
-	const { answers = [] } = answerData || {};
+		// const { answers = [] } = answerData || {};
+		success = answerSuccess;
+		data = answerData!.answers;
+		message = answerMessage;
+	}
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -159,7 +174,7 @@ const ProfilePage = async ({
 					// user's questions
 					<DataRenderer
 						success={success}
-						data={questions}
+						data={data}
 						errorMessage={message}
 						render={(questions) =>
 							questions.map((question, index) => (
@@ -170,9 +185,9 @@ const ProfilePage = async ({
 				) : (
 					// user's answers
 					<DataRenderer
-						success={answerSuccess}
-						data={answers}
-						errorMessage={answerMessage}
+						success={success}
+						data={data}
+						errorMessage={message}
 						render={(questions) =>
 							questions.map((answer, index) => (
 								<AnswerCard answer={answer} key={index} />
