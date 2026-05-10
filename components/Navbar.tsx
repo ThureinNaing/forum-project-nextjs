@@ -1,6 +1,6 @@
 import React from "react";
 import { ModeToggle } from "@/components/dark-light";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
 import ROUTES from "@/routes";
@@ -10,10 +10,12 @@ import { Button } from "./ui/button";
 import { auth, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
+import Image from "next/image";
 
 const Navbar = async () => {
 	const session = await auth();
 	const user = session?.user;
+	console.log("Navbar session:", user);
 	// const upvotes = (answer as any)?.upvotes ?? 0;
 	// const downvotes = (answer as any)?.downvotes ?? 0;
 
@@ -33,17 +35,15 @@ const Navbar = async () => {
 				{user && (
 					<Link href={ROUTES.PROFILE(user.email)}>
 						{user?.image ? (
-							<Avatar>
-								<AvatarImage
-									src={user?.image ?? undefined}
-									alt={user?.name ?? undefined}
-									width={38}
-									height={38}
-									className="rounded-full"
-								/>
-							</Avatar>
+							<Image
+								src={user.image}
+								alt={user.name || "User Avatar"}
+								className="rounded-full"
+								width={36}
+								height={36}
+							/>
 						) : (
-							<div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+							<div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
 								{initial}
 							</div>
 						)}
