@@ -1,6 +1,5 @@
 import React from "react";
 import { ModeToggle } from "@/components/dark-light";
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
 import ROUTES from "@/routes";
@@ -15,7 +14,7 @@ import Image from "next/image";
 const Navbar = async () => {
 	const session = await auth();
 	const user = session?.user;
-	console.log("Navbar session:", user);
+
 	// const upvotes = (answer as any)?.upvotes ?? 0;
 	// const downvotes = (answer as any)?.downvotes ?? 0;
 
