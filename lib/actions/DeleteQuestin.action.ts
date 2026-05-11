@@ -13,6 +13,7 @@ import Vote from "@/models/vote.model";
 import Answer from "@/models/answer.model";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/routes";
+import Tag from "@/models/tag.model";
 
 export default async function DeleteQuestion(params: { questionId: string }) {
 	await dbConnect();
@@ -36,8 +37,9 @@ export default async function DeleteQuestion(params: { questionId: string }) {
 
 		// bookmarked
 		await Collection.deleteMany({ question: questionId }).session(session);
+		await TagQuestion.deleteMany({ question: questionId }).session(session);
 		if (question.tags.length > 0) {
-			await TagQuestion.updateMany(
+			await Tag.updateMany(
 				{
 					_id: { $in: question.tags },
 				},

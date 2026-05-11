@@ -81,7 +81,7 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 						</AlertDialogTitle>
 						<AlertDialogDescription>
 							This action cannot be undone. This will permanently
-							delete your account from our servers.
+							delete your question from our servers.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
@@ -93,7 +93,7 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 						</AlertDialogCancel>
 						<AlertDialogAction
 							variant={"secondary"}
-							className="cursor-pointer0"
+							className="cursor-pointer"
 							onClick={handleDelete}
 						>
 							Continue
