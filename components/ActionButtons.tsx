@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import ROUTES from "@/routes";
@@ -16,6 +16,8 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
+import DeleteQuestion from "@/lib/actions/DeleteQuestin.action";
+import { toast } from "sonner";
 
 interface ActionBtnsProps {
 	type: "question" | "answer";
@@ -24,12 +26,29 @@ interface ActionBtnsProps {
 }
 
 const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
-	if (!showActions) {
-		return null;
-	}
+	const [isPending, startTransition] = useTransition();
 
-	const deleteAction = async () => {
-		console.log(`action for ${type} with id: ${typeId}`);
+	if (!showActions) return null;
+
+	const handleDelete = () => {
+		startTransition(async () => {
+			try {
+				if (type === "question") {
+					const res = await DeleteQuestion({ questionId: typeId });
+
+					if (res?.success) {
+						toast.success("Question deleted successfully");
+					} else {
+						toast.error("Failed to delete question");
+					}
+				} else {
+					// Future-proofing for answers
+					toast.error("Delete Answer action not yet implemented");
+				}
+			} catch (error) {
+				toast.error("An unexpected error occurred");
+			}
+		});
 	};
 
 	return (
@@ -39,7 +58,9 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 					href={ROUTES.QUESTION_DETAILS(typeId) + "/edit"}
 					className="flex items-center gap-1 text-sm text-gray-400 hover:text-main transition-colors"
 				>
-					<FaEdit className="w-4 h-4 text-blue-500 cursor-pointer" />
+					<Button variant={"outline"} className="cursor-pointer">
+						<FaEdit className="w-4 h-4 text-blue-500 cursor-pointer" />
+					</Button>
 				</Link>
 			)}
 			{/* <button
@@ -49,8 +70,8 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 			></button> */}
 			<AlertDialog>
 				<AlertDialogTrigger asChild>
-					<Button variant="outline">
-						<FaTrash className="w-4 h-4 text-red-500 cursor-pointer" />
+					<Button variant="outline" className="cursor-pointer">
+						<FaTrash className="text-red-500 cursor-pointer" />
 					</Button>
 				</AlertDialogTrigger>
 				<AlertDialogContent>
@@ -64,8 +85,17 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
-						<AlertDialogAction onClick={deleteAction}>
+						<AlertDialogCancel
+							variant={"destructive"}
+							className="cursor-pointer"
+						>
+							Cancel
+						</AlertDialogCancel>
+						<AlertDialogAction
+							variant={"secondary"}
+							className="cursor-pointer0"
+							onClick={handleDelete}
+						>
 							Continue
 						</AlertDialogAction>
 					</AlertDialogFooter>

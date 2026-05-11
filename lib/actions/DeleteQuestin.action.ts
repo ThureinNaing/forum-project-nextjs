@@ -17,6 +17,7 @@ import ROUTES from "@/routes";
 export default async function DeleteQuestion(params: { questionId: string }) {
 	await dbConnect();
 	const session = await mongoose.startSession();
+	session.startTransaction();
 
 	try {
 		const auth_session = await auth();
@@ -25,7 +26,6 @@ export default async function DeleteQuestion(params: { questionId: string }) {
 
 		const validatedData = validateBody(params, DeleteQuestionSchema);
 		const { questionId } = validatedData.data;
-		session.startTransaction();
 
 		const question = await Question.findById(questionId).session(session);
 		if (!question) throw new Error("Question not found");
@@ -41,14 +41,14 @@ export default async function DeleteQuestion(params: { questionId: string }) {
 				{
 					_id: { $in: question.tags },
 				},
-				{ $inc: { question: -1 } },
+				{ $inc: { questions: -1 } },
 				{ session },
 			);
 		}
 
 		await Vote.deleteMany({
-			actionId: questionId,
-			actionType: "question",
+			type_id: questionId,
+			type: "question",
 		}).session(session);
 
 		const answers = await Answer.find({ question: questionId }).session(
@@ -57,8 +57,8 @@ export default async function DeleteQuestion(params: { questionId: string }) {
 		if (answers.length > 0) {
 			await Answer.deleteMany({ question: questionId }).session(session);
 			await Vote.deleteMany({
-				actionId: { $in: answers.map((a) => a._id) },
-				actionType: "answer",
+				type_id: { $in: answers.map((a) => a._id) },
+				type: "answer",
 			}).session(session);
 		}
 

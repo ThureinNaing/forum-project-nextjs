@@ -38,7 +38,9 @@ const Pagination = ({
 			>
 				&lt; Previous
 			</Button>
-			<div className="rounded-xl bg-blue-600 px-4 py-2 ">{page}</div>
+			<div className="rounded-xl text-white bg-blue-600 px-4 py-2 ">
+				{page}
+			</div>
 			<Button
 				onClick={() => handleClick("next")}
 				variant={"outline"}
