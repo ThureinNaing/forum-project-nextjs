@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import dbConnect from "../dbConnect";
-import { handleErrorResponse } from "../response";
+import { handleActionErrorResponse, handleErrorResponse } from "../response";
 import DeleteAnswerSchema from "../Schema/DeleteAnswerSchema";
 import validateBody from "../validateBody";
 import Answer from "@/models/answer.model";
@@ -35,6 +35,6 @@ export async function DeleteAnswerAction(params: { answerId: string }) {
 		revalidatePath(ROUTES.PROFILE(user?.email));
 		return { success: true };
 	} catch (error) {
-		return handleErrorResponse(error);
+		return handleActionErrorResponse(error);
 	}
 }

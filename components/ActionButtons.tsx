@@ -18,6 +18,7 @@ import {
 import { Button } from "./ui/button";
 import DeleteQuestion from "@/lib/actions/DeleteQuestin.action";
 import { toast } from "sonner";
+import { DeleteAnswerAction } from "@/lib/actions/DeleteAnswer.action";
 
 interface ActionBtnsProps {
 	type: "question" | "answer";
@@ -33,6 +34,7 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 	const handleDelete = () => {
 		startTransition(async () => {
 			try {
+				// call delete question or answer action based on the type
 				if (type === "question") {
 					const res = await DeleteQuestion({ questionId: typeId });
 
@@ -42,8 +44,14 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 						toast.error("Failed to delete question");
 					}
 				} else {
-					// Future-proofing for answers
-					toast.error("Delete Answer action not yet implemented");
+					// implement delete answer action
+					const res = await DeleteAnswerAction({ answerId: typeId });
+
+					if (res?.success) {
+						toast.success("Answer deleted successfully");
+					} else {
+						toast.error("Failed to delete answer");
+					}
 				}
 			} catch (error) {
 				toast.error("An unexpected error occurred");
@@ -86,14 +94,14 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel
-							variant={"destructive"}
+							variant={"outline"}
 							className="cursor-pointer"
 						>
 							Cancel
 						</AlertDialogCancel>
 						<AlertDialogAction
-							variant={"secondary"}
-							className="cursor-pointer"
+							variant={"destructive"}
+							className="cursor-pointer "
 							onClick={handleDelete}
 						>
 							Continue
