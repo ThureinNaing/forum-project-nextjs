@@ -4,6 +4,18 @@ import React from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import ROUTES from "@/routes";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "./ui/button";
 
 interface ActionBtnsProps {
 	type: "question" | "answer";
@@ -30,13 +42,35 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 					<FaEdit className="w-4 h-4 text-blue-500 cursor-pointer" />
 				</Link>
 			)}
-			<button
+			{/* <button
 				onClick={deleteAction}
 				className="flex items-center gap-1 text-sm text-gray-400 hover:text-red-500 transition-colors"
 				type="button"
-			>
-				<FaTrash className="w-4 h-4 text-red-500 cursor-pointer" />
-			</button>
+			></button> */}
+			<AlertDialog>
+				<AlertDialogTrigger asChild>
+					<Button variant="outline">
+						<FaTrash className="w-4 h-4 text-red-500 cursor-pointer" />
+					</Button>
+				</AlertDialogTrigger>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>
+							Are you absolutely sure?
+						</AlertDialogTitle>
+						<AlertDialogDescription>
+							This action cannot be undone. This will permanently
+							delete your account from our servers.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogAction onClick={deleteAction}>
+							Continue
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
 		</div>
 	);
 };
