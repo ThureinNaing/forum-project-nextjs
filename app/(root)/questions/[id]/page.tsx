@@ -12,6 +12,25 @@ import ToggleBookmark from "../components/ToggleBookmark";
 import Pagination from "@/components/Pagination";
 import GetUserVote from "@/lib/actions/GetUserVote.action";
 import { Suspense } from "react";
+import type { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+	params: Promise<{ id: string }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const id = (await params).id;
+
+	const { data: question } = await GetQuestion({
+		questionId: id,
+	});
+
+	return {
+		title: question?.title,
+		description: question?.content.slice(0, 100),
+	};
+}
 
 async function page({
 	params,
