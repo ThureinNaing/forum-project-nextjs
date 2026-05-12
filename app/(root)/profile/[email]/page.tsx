@@ -1,10 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { UserX, ArrowLeft, Search } from "lucide-react";
 import Link from "next/link";
-import GetUserAction from "@/lib/actions/GetUser.action";
 import ProfileHeader from "@/components/ProfileHeader";
-import StatsCard from "@/components/StatsCard";
 import DataRenderer from "@/components/DataRenderer";
 import ThreadCard from "@/components/ThreadCard";
 import GetUserQuestionsAction from "@/lib/actions/GetUserQuestions.action";

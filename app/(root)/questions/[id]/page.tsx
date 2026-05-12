@@ -10,6 +10,8 @@ import AnswerList from "../components/AnswerList";
 import VoteButtons from "../components/VoteButtons";
 import ToggleBookmark from "../components/ToggleBookmark";
 import Pagination from "@/components/Pagination";
+import GetUserVote from "@/lib/actions/GetUserVote.action";
+import { Suspense } from "react";
 
 async function page({
 	params,
@@ -42,19 +44,29 @@ async function page({
 		questionId: id,
 	});
 
-	const { answers = [], totalAnswers = 0, isNext = false } = answersData || {};
+	const {
+		answers = [],
+		totalAnswers = 0,
+		isNext = false,
+	} = answersData || {};
 
 	return (
 		<div className="p-3">
 			<div className="flex justify-between items-center">
 				<h1 className="text-3xl font-bold">{question.title}</h1>
 				<div className="flex items-center gap-3 text-xs text-gray-200">
-					<VoteButtons
-						type="question"
-						typeId={id.toString()}
-						initialDownvotes={question.downvotes}
-						initialUpvotes={question.upvotes}
-					/>
+					<Suspense fallback={<>Loading...</>}>
+						<VoteButtons
+							type="question"
+							typeId={id.toString()}
+							initialDownvotes={question.downvotes}
+							initialUpvotes={question.upvotes}
+							GetUserVoteActionPromise={GetUserVote({
+								type: "question",
+								typeId: question._id,
+							})}
+						/>
+					</Suspense>
 					<div>{question.answers} Answers</div>
 					<div>{question.views} Views</div>
 					<ToggleBookmark

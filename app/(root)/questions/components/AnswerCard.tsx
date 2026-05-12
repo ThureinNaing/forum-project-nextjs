@@ -1,10 +1,11 @@
 import Preview from "@/components/Preview";
 import { IAnswerDocument } from "@/models/answer.model";
-import React from "react";
+import React, { Suspense } from "react";
 import VoteButtons from "./VoteButtons";
 import { getTimeStamp } from "@/lib/utils";
 import Image from "next/image";
 import ActionButtons from "@/components/ActionButtons";
+import GetUserVote from "@/lib/actions/GetUserVote.action";
 
 interface IAnswerWithPopulatedAuthor extends Omit<IAnswerDocument, "author"> {
 	author: {
@@ -57,12 +58,18 @@ function AnswerCard({ answer, showActions = false }: AnswerCardProps) {
 			</div>
 
 			<footer className="mt-4 flex items-center justify-between">
-				<VoteButtons
-					type={"answer"}
-					typeId={answer?._id.toString()}
-					initialUpvotes={answer.upvotes}
-					initialDownvotes={answer.downvotes}
-				/>
+				<Suspense fallback={<>Loading...</>}>
+					<VoteButtons
+						type="answer"
+						typeId={answer._id.toString()}
+						initialDownvotes={answer.downvotes}
+						initialUpvotes={answer.upvotes}
+						GetUserVoteActionPromise={GetUserVote({
+							type: "answer",
+							typeId: answer._id.toString(),
+						})}
+					/>
+				</Suspense>
 				<ActionButtons
 					type="answer"
 					typeId={answer._id.toString()}

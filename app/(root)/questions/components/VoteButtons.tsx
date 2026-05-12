@@ -2,7 +2,7 @@
 
 import GetUserVote from "@/lib/actions/GetUserVote.action";
 import { VoteAction } from "@/lib/actions/Vote.action";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const VoteButtons = ({
@@ -10,27 +10,23 @@ const VoteButtons = ({
 	type,
 	initialUpvotes,
 	initialDownvotes,
+	GetUserVoteActionPromise,
 }: {
 	typeId: string;
 	type: "question" | "answer";
 	initialUpvotes: number;
 	initialDownvotes: number;
+	GetUserVoteActionPromise: Promise<{
+		success: boolean;
+		data?: { userVote: "upvote" | "downvote" | null };
+	}>;
 }) => {
+	const { success, data } = use(GetUserVoteActionPromise);
 	const [upvotes, setUpvotes] = useState(initialUpvotes);
 	const [downvotes, setDownvotes] = useState(initialDownvotes);
 	const [userVote, setUserVote] = useState<"upvote" | "downvote" | null>(
-		null,
+		success ? (data?.userVote ?? null) : null,
 	);
-
-	useEffect(() => {
-		const fetchUserVote = async () => {
-			const { success, data } = await GetUserVote({ type, typeId });
-			if (success && data) {
-				setUserVote(data.userVote);
-			}
-		};
-		fetchUserVote();
-	}, [type, typeId]);
 
 	const handleVote = async (voteType: "upvote" | "downvote") => {
 		try {
