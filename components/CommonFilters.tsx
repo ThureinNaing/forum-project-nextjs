@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import queryString from "query-string";
-import React from "react";
+import React, { useTransition } from "react";
 
 export interface Filter {
 	name: string;
@@ -15,6 +15,7 @@ const CommonFilters = ({
 	filters: Filter[];
 	defaultFilter: string;
 }) => {
+	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const currentFilter = searchParams.get("filter") || defaultFilter;
@@ -33,14 +34,17 @@ const CommonFilters = ({
 			},
 			{ skipNull: true, skipEmptyString: true },
 		);
-		router.push(url);
+		startTransition(() => {
+			router.push(url);
+		});
 	};
 	return (
 		<div className="p-5">
 			<select
+				disabled={isPending}
 				value={currentFilter}
 				onChange={handleFilterChange}
-				className="rounded-xl px-4 py-2 bg-accent  dark:bg-[#081338] dark:text-gray-300 border-none outline-none cursor-pointer "
+				className={`rounded-xl px-4 py-2 bg-accent  dark:bg-[#081338] dark:text-gray-300 border-none outline-none cursor-pointer ${isPending ? "cursor-not-allowed" : ""}`}
 			>
 				{filters?.map((filter) => (
 					<option
