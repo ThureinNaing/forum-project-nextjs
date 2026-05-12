@@ -5,14 +5,12 @@ import { IncrementViews } from "@/lib/actions/IncrementViews.action";
 import { notFound } from "next/navigation";
 import { after } from "next/server";
 import AnswerForm from "../components/AnswerForm";
-import { GetAnswers } from "@/lib/actions/GetAnswers.action";
 import AnswerList from "../components/AnswerList";
 import VoteButtons from "../components/VoteButtons";
 import ToggleBookmark from "../components/ToggleBookmark";
-import Pagination from "@/components/Pagination";
 import GetUserVote from "@/lib/actions/GetUserVote.action";
 import { Suspense } from "react";
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 
 type Props = {
 	params: Promise<{ id: string }>;
@@ -52,23 +50,6 @@ async function page({
 		await IncrementViews({ questionId: id }); // Increment views count
 	});
 
-	const {
-		success,
-		data: answersData,
-		message: answerErrorMsg,
-	} = await GetAnswers({
-		page: Number(page),
-		pageSize: Number(pageSize),
-		filter: filter as string,
-		questionId: id,
-	});
-
-	const {
-		answers = [],
-		totalAnswers = 0,
-		isNext = false,
-	} = answersData || {};
-
 	return (
 		<div className="p-3">
 			<div className="flex justify-between items-center">
@@ -106,13 +87,14 @@ async function page({
 			</div>
 
 			<div className="my-3">
-				<AnswerList
-					answers={answers}
-					totalAnswers={totalAnswers}
-					success={success}
-					errorMessage={answerErrorMsg}
-				/>
-				<Pagination isNext={isNext} page={page} />
+				<Suspense fallback={<>Loading...</>}>
+					<AnswerList
+						id={id}
+						page={Number(page)}
+						pageSize={Number(pageSize)}
+						filter={filter}
+					/>
+				</Suspense>
 			</div>
 
 			<div className="my-3">
