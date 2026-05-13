@@ -9,7 +9,7 @@ const StatsCard = ({
 }) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-			<Card>
+			<Card className="bg-gray-200 dark:bg-[#081338]">
 				<CardHeader className="pb-3">
 					<CardTitle className="text-lg">Questions Asked</CardTitle>
 				</CardHeader>
@@ -23,7 +23,7 @@ const StatsCard = ({
 				</CardContent>
 			</Card>
 
-			<Card>
+			<Card className="bg-gray-200 dark:bg-[#081338]">
 				<CardHeader className="pb-3">
 					<CardTitle className="text-lg">Answers Given</CardTitle>
 				</CardHeader>

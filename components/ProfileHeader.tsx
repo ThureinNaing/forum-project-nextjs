@@ -100,7 +100,7 @@ const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
 	const { user, totalQuestions, totalAnswers } = users.data;
 	return (
 		<>
-			<Card className="mb-8">
+			<Card className="mb-8 bg-gray-200 dark:bg-[#081338]">
 				<CardContent className="pt-6">
 					<div className="flex flex-col md:flex-row gap-6">
 						{/* Avatar Section */}
@@ -177,6 +177,7 @@ const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
 				totalAnswers={totalAnswers}
 				totalQuestions={totalQuestions}
 			/>
+			<div className="border-2" />
 		</>
 	);
 };
