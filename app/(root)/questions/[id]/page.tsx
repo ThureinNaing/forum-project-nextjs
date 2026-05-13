@@ -1,6 +1,5 @@
 import Preview from "@/components/Preview";
 import TagCard from "@/components/TagCard";
-import { GetQuestion } from "@/lib/actions/GetQuestion.actions";
 import { IncrementViews } from "@/lib/actions/IncrementViews.action";
 import { notFound } from "next/navigation";
 import { after } from "next/server";
@@ -11,6 +10,7 @@ import ToggleBookmark from "../components/ToggleBookmark";
 import GetUserVote from "@/lib/actions/GetUserVote.action";
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import GetQuestion from "@/lib/actions/GetQuestion.actions";
 
 type Props = {
 	params: Promise<{ id: string }>;
@@ -20,9 +20,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const id = (await params).id;
 
-	const { data: question } = await GetQuestion({
-		questionId: id,
-	});
+	const { data: question } = await GetQuestion(id);
 
 	return {
 		title: question?.title,
@@ -40,9 +38,7 @@ async function page({
 	const { id } = await params;
 	const { page = 1, pageSize = 10, filter } = await searchParams;
 
-	const { data: question } = await GetQuestion({
-		questionId: id,
-	});
+	const { data: question } = await GetQuestion(id);
 
 	if (!question) notFound();
 
