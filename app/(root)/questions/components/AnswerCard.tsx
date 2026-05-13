@@ -6,6 +6,7 @@ import { getTimeStamp } from "@/lib/utils";
 import Image from "next/image";
 import ActionButtons from "@/components/ActionButtons";
 import GetUserVote from "@/lib/actions/GetUserVote.action";
+import VoteButtonsLoading from "@/components/loading/VoteButtonsLoading";
 
 interface IAnswerWithPopulatedAuthor extends Omit<IAnswerDocument, "author"> {
 	author: {
@@ -58,7 +59,7 @@ function AnswerCard({ answer, showActions = false }: AnswerCardProps) {
 			</div>
 
 			<footer className="mt-4 flex items-center justify-between">
-				<Suspense fallback={<>Loading...</>}>
+				<Suspense fallback={<VoteButtonsLoading />}>
 					<VoteButtons
 						type="answer"
 						typeId={answer._id.toString()}
