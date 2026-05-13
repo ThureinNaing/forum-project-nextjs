@@ -1,9 +1,9 @@
 "use client";
 
-import GetUserVote from "@/lib/actions/GetUserVote.action";
 import { VoteAction } from "@/lib/actions/Vote.action";
-import { use, useEffect, useState } from "react";
+import { use, useState } from "react";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 const VoteButtons = ({
 	typeId,
@@ -21,6 +21,7 @@ const VoteButtons = ({
 		data?: { userVote: "upvote" | "downvote" | null };
 	}>;
 }) => {
+	const { data: session } = useSession();
 	const { success, data } = use(GetUserVoteActionPromise);
 	const [upvotes, setUpvotes] = useState(initialUpvotes);
 	const [downvotes, setDownvotes] = useState(initialDownvotes);
@@ -29,6 +30,13 @@ const VoteButtons = ({
 	);
 
 	const handleVote = async (voteType: "upvote" | "downvote") => {
+		// Check if user is logged in
+		if (!session?.user) {
+			toast.error("Please log in to vote");
+
+			return;
+		}
+
 		try {
 			const { success, data } = await VoteAction({
 				type,
