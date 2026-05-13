@@ -22,10 +22,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 				if (validationFields.success) {
 					const { email, password } = validationFields.data;
 
-					// const { data: existingAccount } =
-					// 	await api.accounts?.getByProvider(email);
-					const existingAccount =
-						await GetAccountByProviderAction(email);
+					const { data: existingAccount } =
+						await api.accounts?.getByProvider(email);
+					// const existingAccount =
+					// 	await GetAccountByProviderAction(email);
 
 					if (!existingAccount) return null;
 
