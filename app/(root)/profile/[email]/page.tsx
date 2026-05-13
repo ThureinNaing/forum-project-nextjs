@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ProfileHeader from "@/components/ProfileHeader";
+import ProfileHeaderLoading from "@/components/loading/ProfileHeaderLoading";
 import DataRenderer from "@/components/DataRenderer";
 import ThreadCard from "@/components/ThreadCard";
 import GetUserQuestionsAction from "@/lib/actions/GetUserQuestions.action";
@@ -73,7 +74,7 @@ const ProfilePage = async ({
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<div className="max-w-4xl mx-auto">
-				<Suspense fallback={<>Loading...</>}>
+				<Suspense fallback={<ProfileHeaderLoading />}>
 					<ProfileHeader userEmail={decodedEmail} />
 				</Suspense>
 
