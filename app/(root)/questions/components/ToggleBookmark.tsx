@@ -4,6 +4,7 @@ import ToggleBookmarkAction from "@/lib/actions/ToogleBookmark.action";
 import { Bookmark } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 const ToogleBookmark = ({
 	questionId,
@@ -12,9 +13,16 @@ const ToogleBookmark = ({
 	questionId: string;
 	saved: boolean;
 }) => {
+	const { data: session } = useSession();
 	const [isBookmarked, setIsBookmarked] = useState(saved);
 
 	const handleBookmark = async () => {
+		// Check if user is logged in
+		if (!session?.user) {
+			toast.error("Please log in to bookmark questions");
+			return;
+		}
+
 		try {
 			const { success, data } = await ToggleBookmarkAction({
 				questionId,
@@ -38,7 +46,7 @@ const ToogleBookmark = ({
 		}
 	};
 	return (
-		<button onClick={handleBookmark}>
+		<button onClick={handleBookmark} className="cursor-pointer">
 			<Bookmark fill={`${isBookmarked ? "blue" : ""}`} />
 		</button>
 	);
