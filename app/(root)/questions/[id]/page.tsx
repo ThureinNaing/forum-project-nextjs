@@ -11,6 +11,7 @@ import GetUserVote from "@/lib/actions/GetUserVote.action";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import GetQuestion from "@/lib/actions/GetQuestion.actions";
+import VoteButtonsLoading from "@/components/loading/VoteButtonsLoading";
 
 type Props = {
 	params: Promise<{ id: string }>;
@@ -51,7 +52,7 @@ async function page({
 			<div className="flex justify-between items-center">
 				<h1 className="text-3xl font-bold">{question.title}</h1>
 				<div className="flex items-center gap-3 text-xs text-gray-200">
-					<Suspense fallback={<>Loading...</>}>
+					<Suspense fallback={<VoteButtonsLoading />}>
 						<VoteButtons
 							type="question"
 							typeId={id.toString()}
