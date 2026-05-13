@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { AlertTriangle, Search, RotateCcw, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { AlertTriangle, Search } from "lucide-react";
 
 const DataRenderer = ({
 	success,
