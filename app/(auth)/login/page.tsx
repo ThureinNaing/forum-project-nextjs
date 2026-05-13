@@ -26,6 +26,15 @@ const Login = () => {
 	const router = useRouter();
 	const { data: session, status } = useSession();
 
+	// 1. Define your form.
+	const form = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
+
 	useEffect(() => {
 		if (status === "authenticated") {
 			router.replace(ROUTES.HOME);
@@ -39,15 +48,6 @@ const Login = () => {
 	if (session) {
 		return null;
 	}
-
-	// 1. Define your form.
-	const form = useForm<z.infer<typeof loginSchema>>({
-		resolver: zodResolver(loginSchema),
-		defaultValues: {
-			email: "",
-			password: "",
-		},
-	});
 
 	async function onSubmit(values: z.infer<typeof loginSchema>) {
 		const res = await signInWithCredentials(values);

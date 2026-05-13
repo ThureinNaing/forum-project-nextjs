@@ -54,7 +54,11 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 					}
 				}
 			} catch (error) {
-				toast.error("An unexpected error occurred");
+				const errorMessage =
+					error instanceof Error
+						? error.message
+						: "An unexpected error occured.";
+				toast.error(errorMessage);
 			}
 		});
 	};
@@ -103,6 +107,7 @@ const ActionButtons = ({ type, typeId, showActions }: ActionBtnsProps) => {
 							variant={"destructive"}
 							className="cursor-pointer "
 							onClick={handleDelete}
+							disabled={isPending}
 						>
 							Continue
 						</AlertDialogAction>

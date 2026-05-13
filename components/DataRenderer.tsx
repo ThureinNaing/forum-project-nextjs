@@ -76,7 +76,7 @@ const DataRenderer = ({
 						</h1>
 						<p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
 							Try adjusting your filters or search criteria to
-							find what you're looking for.
+							find what you&apos;re looking for.
 						</p>
 					</div>
 

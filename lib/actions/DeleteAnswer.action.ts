@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import dbConnect from "../dbConnect";
-import { handleActionErrorResponse, handleErrorResponse } from "../response";
+import { handleActionErrorResponse } from "../response";
 import DeleteAnswerSchema from "../Schema/DeleteAnswerSchema";
 import validateBody from "../validateBody";
 import Answer from "@/models/answer.model";

@@ -1,10 +1,4 @@
 import { CircleHelp } from "lucide-react";
-import { FaReact } from "react-icons/fa";
-import { RiMvAiFill, RiNextjsFill } from "react-icons/ri";
-import { FaNodeJs } from "react-icons/fa";
-import { FaPython } from "react-icons/fa6";
-import { FaVuejs } from "react-icons/fa";
-import { FaLaravel } from "react-icons/fa";
 import GetPopularQuestions from "@/lib/actions/GetPopularQuestions.action";
 import GetPopularTags from "@/lib/actions/GetPopularTags.action";
 import DataRenderer from "./DataRenderer";
@@ -25,7 +19,7 @@ const RightSidebar = async () => {
 		data: tagsData,
 		message: tagMessage,
 	} = await GetPopularTags();
-	let { tags = [] } = tagsData || {};
+	const { tags = [] } = tagsData || {};
 	return (
 		<div className="space-y-5">
 			<div className="space-y-5">
