@@ -12,6 +12,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import GetQuestion from "@/lib/actions/GetQuestion.actions";
 import VoteButtonsLoading from "@/components/loading/VoteButtonsLoading";
+import AnswerListLoading from "@/components/loading/AnswerListLoading";
 
 type Props = {
 	params: Promise<{ id: string }>;
@@ -84,7 +85,7 @@ async function page({
 			</div>
 
 			<div className="my-3">
-				<Suspense fallback={<>Loading...</>}>
+				<Suspense fallback={<AnswerListLoading />}>
 					<AnswerList
 						id={id}
 						page={Number(page)}
