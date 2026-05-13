@@ -26,12 +26,9 @@ export async function CreateAnswer(params: {
 	try {
 		const auth_session = await auth();
 		const userEmail = auth_session?.user?.email;
+		if (!userEmail) throw new Error("User not authenticated");
 
 		const user = await User.findOne({ email: userEmail });
-
-		if (!user) {
-			throw new Error("User not found");
-		}
 
 		const validatedData = validateBody(params, CreateAnswerSchema);
 		const { questionId, content } = validatedData.data;

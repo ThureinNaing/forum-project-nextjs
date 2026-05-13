@@ -54,12 +54,15 @@ const AnswerForm = ({
 				questionId,
 				content,
 			});
-			console.log(message);
 
 			if (success && data) {
 				setContent("");
 				toast.success("Answer submitted successfully!");
 				return router.push(ROUTES.QUESTION_DETAILS(questionId));
+			} else {
+				toast.error(
+					message || "Failed to submit answer. Please try again.",
+				);
 			}
 		} catch (error) {
 			toast.error(
