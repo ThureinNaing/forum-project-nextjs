@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -20,11 +20,13 @@ import ROUTES from "@/routes";
 import { signInWithCredentials } from "@/lib/actions/SignInWithCredentials.actions";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { FaSpinner } from "react-icons/fa";
 
 const Login = () => {
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 	const { data: session, status } = useSession();
+	const [isPending, startTransition] = useTransition();
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof loginSchema>>({
@@ -50,15 +52,17 @@ const Login = () => {
 	}
 
 	async function onSubmit(values: z.infer<typeof loginSchema>) {
-		const res = await signInWithCredentials(values);
+		startTransition(async () => {
+			const res = await signInWithCredentials(values);
 
-		if (res.success) {
-			router.push(ROUTES.HOME);
-		} else {
-			if ("message" in res && res.message) {
-				setError(res.message);
+			if (res.success) {
+				router.push(ROUTES.HOME);
+			} else {
+				if ("message" in res && res.message) {
+					setError(res.message);
+				}
 			}
-		}
+		});
 	}
 	return (
 		<div className="p-10  min-h-screen flex flex-col items-center justify-center">
@@ -99,19 +103,25 @@ const Login = () => {
 								</FormControl>
 
 								<FormMessage className="text-red-500" />
-								{error &&
-									error !==
-										"Password must be at least 8 character" && (
-										<FormMessage className="text-red-500">
-											{error}
-										</FormMessage>
-									)}
+								{error && (
+									<p className="text-sm text-red-500">
+										{error}
+									</p>
+								)}
 							</FormItem>
 						)}
 					/>
 
-					<Button type="submit" className="w-full">
-						Login
+					<Button
+						type="submit"
+						className="w-full"
+						disabled={isPending}
+					>
+						{isPending ? (
+							<FaSpinner className="h-5 w-5 animate-spin" />
+						) : (
+							<span>Login</span>
+						)}
 					</Button>
 					<AuthForm />
 					<div className="flex items-center justify-start gap-2 text-sm">
