@@ -5,6 +5,7 @@ import DataRenderer from "@/components/DataRenderer";
 import ThreadCard from "@/components/ThreadCard";
 import GetUserQuestionsAction from "@/lib/actions/GetUserQuestions.action";
 import GetUserAnswersAction from "@/lib/actions/GetUserAnswers.action";
+import GetUserAction from "@/lib/actions/GetUser.action";
 import AnswerCard from "../../questions/components/AnswerCard";
 import Pagination from "@/components/Pagination";
 import { auth } from "@/auth";
@@ -26,47 +27,47 @@ const ProfilePage = async ({
 	const user_session = await auth();
 	const userMail = (await params).email;
 	const decodedEmail = decodeURIComponent(userMail);
+	const { data: profileData } = await GetUserAction({ email: decodedEmail });
+	const profileUserId = profileData?.user?._id?.toString();
 	const {
 		page = 1,
 		pageSize = 10,
 		tab: activeTab = "questions",
 	} = await searchParams;
 
-	let success;
-	let data;
-	let message;
+	let success = true;
+	let data: unknown[] = [];
+	let message: string | undefined;
 	let isNext: boolean | undefined = false;
 
-	if (activeTab === "questions") {
+	if (profileUserId && activeTab === "questions") {
 		const {
 			success: questinSuccess,
 			data: questionsData,
 			message: questionMsg,
 		} = await GetUserQuestionsAction({
-			userId: user_session?.user?.id || "",
+			userId: profileUserId,
 			page: Number(page) || 1,
 			pageSize: Number(pageSize) || 10,
 		});
 
-		// const { questions = [] } = data || {};
 		success = questinSuccess;
-		data = questionsData!.questions;
+		data = questionsData?.questions || [];
 		message = questionMsg;
-		isNext = questionsData!.isNext;
-	} else {
+		isNext = questionsData?.isNext;
+	} else if (profileUserId) {
 		const {
 			success: answerSuccess,
 			data: answerData,
 			message: answerMessage,
 		} = await GetUserAnswersAction({
-			userId: user_session?.user?.id || "",
+			userId: profileUserId,
 			page: Number(page) || 1,
 			pageSize: Number(pageSize) || 10,
 		});
 
-		// const { answers = [] } = answerData || {};
 		success = answerSuccess;
-		data = answerData!.answers;
+		data = answerData?.answers || [];
 		message = answerMessage;
 		isNext = answerData?.isNext;
 	}
