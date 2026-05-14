@@ -1,18 +1,15 @@
 import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { api } from "./lib/api";
 import validateBody from "./lib/validateBody";
 import SignInSchema from "./lib/Schema/SignInSchema";
 import bcrypt from "bcryptjs";
-import { GetAccountByProviderAction } from "./lib/actions/GetAccountByProvider.action";
+import authConfig from "./auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-	trustHost: true,
+	...authConfig,
 	providers: [
-		GitHub,
-		Google,
+		...(authConfig.providers ?? []),
 		Credentials({
 			authorize: async (credentials) => {
 				const validationFields = validateBody(
