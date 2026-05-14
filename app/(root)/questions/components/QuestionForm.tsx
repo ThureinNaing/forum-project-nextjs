@@ -33,9 +33,18 @@ const QuestionForm = ({
 
 	const enterPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
+			e.preventDefault();
+			e.stopPropagation();
+
+			const trimmedTag = newTag.trim();
+			if (!trimmedTag) {
+				setError("Tag cannot be empty");
+				return;
+			}
+
 			const lowerCaseTags = tags.map((tag) => tag.toLowerCase().trim());
-			if (!lowerCaseTags.includes(newTag.toLowerCase().trim())) {
-				setTags([...tags, newTag]);
+			if (!lowerCaseTags.includes(trimmedTag.toLowerCase())) {
+				setTags([...tags, trimmedTag]);
 				setNewTag("");
 				setError("");
 			} else {
