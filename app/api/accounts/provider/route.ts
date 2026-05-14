@@ -1,3 +1,4 @@
+import dbConnect from "@/lib/dbConnect";
 import { handleErrorResponse, handleSuccessResponse } from "@/lib/response";
 import Account from "@/models/account.model";
 
@@ -5,6 +6,7 @@ import Account from "@/models/account.model";
 // This endpoint retrieves an account by its providerAccountId
 export async function POST(request: Request) {
 	try {
+		await dbConnect();
 		const { providerAccountId } = await request.json();
 		const account = await Account.findOne({ providerAccountId });
 		if (!account) throw new Error("Account not found");

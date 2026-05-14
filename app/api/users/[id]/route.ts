@@ -33,6 +33,7 @@ export async function DELETE(
 	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		await dbConnect();
 		const { id } = await params;
 		if (!Types.ObjectId.isValid(id)) throw new Error("Invalid User ID");
 		const auth_session = await auth();
@@ -58,6 +59,7 @@ export async function PUT(
 	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		await dbConnect();
 		const { id } = await params;
 		const body = await request.json();
 
@@ -69,7 +71,7 @@ export async function PUT(
 			throw new Error("Unauthorized: Please login first");
 		}
 		if (userId !== id) {
-			throw new Error("Forbidden: You can only delete your own account");
+			throw new Error("Forbidden: You can only edit your own account");
 		}
 
 		const validatedData = validateBody(body, UserSchema, true);

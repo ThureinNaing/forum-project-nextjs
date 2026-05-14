@@ -10,6 +10,7 @@ import Tag, { ITagDocument } from "@/models/tag.model";
 import TagQuestion from "@/models/tag-question.model";
 import { handleActionErrorResponse } from "../response";
 import type { QuestionWriteResult } from "@/types/question";
+import { auth } from "@/auth";
 
 export async function QuestionEdit(params: {
 	questionId: string;
@@ -23,8 +24,9 @@ export async function QuestionEdit(params: {
 	details?: object | null;
 }> {
 	await dbConnect();
-	const validatedData = validateBody(params, EditQuestionSchema);
-	const { title, content, tags, questionId } = validatedData.data;
+	const auth_session = await auth();
+	const userId = auth_session?.user?.id;
+
 	// const auth_session = await auth();
 	// const userId = auth_session?.user?.id;
 
@@ -32,14 +34,23 @@ export async function QuestionEdit(params: {
 	session.startTransaction();
 
 	try {
+		const validatedData = validateBody(params, EditQuestionSchema);
+		const { title, content, tags, questionId } = validatedData.data;
+		if (!auth_session || !auth_session.user) {
+			throw new Error("Unauthorized: Please login first");
+		}
+
 		const question = await Question.findById(questionId).populate("tags");
 		if (!question) {
 			throw new Error("Failed to get a question");
 		}
+		if (userId !== question.author.toString()) {
+			throw new Error("Forbidden: You can only edit your question");
+		}
 
 		const currentTags = question.tags as unknown as ITagDocument[];
 		const currentTagNames = currentTags.map((tag) =>
-			tag.name.toLowerCase()
+			tag.name.toLowerCase(),
 		);
 
 		if (question.title !== title || question.content !== content) {
@@ -49,21 +60,21 @@ export async function QuestionEdit(params: {
 		}
 
 		const tagsToAdd = tags.filter(
-			(tag: string) => !currentTagNames.includes(tag.toLowerCase())
+			(tag: string) => !currentTagNames.includes(tag.toLowerCase()),
 		);
 		const tagsToRemove = currentTags.filter(
-			(tag: ITagDocument) => !tags.includes(tag.name.toLowerCase())
+			(tag: ITagDocument) => !tags.includes(tag.name.toLowerCase()),
 		);
 
 		if (tagsToRemove.length) {
 			const tagIdsToRemove = tagsToRemove.map(
-				(tag: ITagDocument) => tag._id
+				(tag: ITagDocument) => tag._id,
 			);
 
 			await Tag.updateMany(
 				{ _id: { $in: tagIdsToRemove } },
 				{ $inc: { questions: -1 } },
-				{ session }
+				{ session },
 			);
 
 			await TagQuestion.deleteMany({
@@ -75,12 +86,12 @@ export async function QuestionEdit(params: {
 				.filter(
 					(tag: ITagDocument) =>
 						!tagsToRemove.some((tagToRemove) =>
-							tagToRemove._id.equals(tag._id)
-						)
+							tagToRemove._id.equals(tag._id),
+						),
 				)
 				.map(
 					(tag: ITagDocument) =>
-						new mongoose.Types.ObjectId(tag._id.toString())
+						new mongoose.Types.ObjectId(tag._id.toString()),
 				);
 		}
 
@@ -92,7 +103,7 @@ export async function QuestionEdit(params: {
 						name: { $regex: new RegExp(`^${tag}$`, "i") },
 					},
 					{ $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-					{ upsert: true, new: true, session }
+					{ upsert: true, new: true, session },
 				);
 				if (existingTag) {
 					const existingTagQuestion = await TagQuestion.findOne({
@@ -108,8 +119,8 @@ export async function QuestionEdit(params: {
 				}
 
 				if (
-					!(question.tags as mongoose.Types.ObjectId[]).some((tagId) =>
-						tagId.equals(existingTag._id)
+					!(question.tags as mongoose.Types.ObjectId[]).some(
+						(tagId) => tagId.equals(existingTag._id),
 					)
 				) {
 					question.tags.push(existingTag._id);
