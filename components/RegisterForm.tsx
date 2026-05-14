@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -21,10 +21,12 @@ import ROUTES from "@/routes";
 import AuthForm from "@/app/(auth)/components/authForm";
 import { signUpWithCredentials } from "@/lib/actions/SignUpWithCredetntials.actions";
 import { useRouter } from "next/navigation";
+import { FaSpinner } from "react-icons/fa";
 
 const RegisterForm = () => {
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
+	const [isPending, startTransition] = useTransition();
 	//Define form.
 	const form = useForm<z.infer<typeof registerSchema>>({
 		resolver: zodResolver(registerSchema),
@@ -38,15 +40,17 @@ const RegisterForm = () => {
 	});
 
 	async function onSubmit(values: z.infer<typeof registerSchema>) {
-		const res = await signUpWithCredentials(values);
+		startTransition(async () => {
+			const res = await signUpWithCredentials(values);
 
-		if (res.success) {
-			router.push(ROUTES.HOME);
-		} else {
-			if ("message" in res && res.message) {
-				setError(res.message);
+			if (res.success) {
+				router.push(ROUTES.HOME);
+			} else {
+				if ("message" in res && res.message) {
+					setError(res.message);
+				}
 			}
-		}
+		});
 	}
 	return (
 		<div className="h-full flex min-h-screen items-center justify-center">
@@ -153,8 +157,12 @@ const RegisterForm = () => {
 						)}
 					/>
 
-					<Button type="submit" className="w-full">
-						Register
+					<Button type="submit" className="w-full cursor-pointer">
+						{isPending ? (
+							<FaSpinner className="h-5 w-5 animate-spin" />
+						) : (
+							<span>Register</span>
+						)}
 					</Button>
 					<AuthForm />
 					<div className="flex items-center justify-start gap-2 ">
