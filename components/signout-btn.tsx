@@ -1,21 +1,24 @@
-"use server";
-import { signOut } from "@/auth";
-import { Button } from "./ui/button";
-import { redirect } from "next/navigation";
-import ROUTES from "@/routes";
+"use client";
 
-export async function SignOut() {
+import { Button } from "./ui/button";
+import ROUTES from "@/routes";
+import { signOut } from "next-auth/react";
+import { LogOut } from "lucide-react";
+
+const SignOutButton = () => {
 	return (
-		<form
-			action={async () => {
-				"use server";
-				await signOut({ redirect: false });
-				return redirect(ROUTES.LOGIN);
+		<Button
+			variant={"destructive"}
+			type="button"
+			className="text-white cursor-pointer"
+			onClick={async () => {
+				await signOut({ redirectTo: ROUTES.LOGIN });
 			}}
 		>
-			<Button variant={"destructive"} type="submit">
-				Sign Out
-			</Button>
-		</form>
+			<LogOut />
+			<span className="hidden md:block lg:block">Logout</span>
+		</Button>
 	);
-}
+};
+
+export default SignOutButton;

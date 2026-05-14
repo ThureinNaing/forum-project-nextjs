@@ -4,12 +4,9 @@ import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
 import ROUTES from "@/routes";
 import SearchInput from "./SearchInput";
-// import { SignOut } from "./signout-btn";
-import { Button } from "./ui/button";
-import { auth, signOut } from "@/auth";
-import { redirect } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { auth } from "@/auth";
 import Image from "next/image";
+import SignOutButton from "./signout-btn";
 
 const Navbar = async () => {
 	const session = await auth();
@@ -58,27 +55,7 @@ const Navbar = async () => {
 					</Link>
 				)}
 
-				{/* {<SignOut />} */}
-				{user && (
-					<form
-						action={async () => {
-							"use server";
-							await signOut({ redirect: false });
-							return redirect(ROUTES.LOGIN);
-						}}
-					>
-						<Button
-							variant={"destructive"}
-							type="submit"
-							className="text-white cursor-pointer"
-						>
-							<LogOut />
-							<span className="hidden md:block lg:block">
-								Logout
-							</span>
-						</Button>
-					</form>
-				)}
+				{user && <SignOutButton />}
 
 				<ModeToggle />
 			</div>
