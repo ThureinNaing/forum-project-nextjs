@@ -9,6 +9,7 @@ import bcrypt from "bcryptjs";
 import { GetAccountByProviderAction } from "./lib/actions/GetAccountByProvider.action";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+	trustHost: true,
 	providers: [
 		GitHub,
 		Google,
