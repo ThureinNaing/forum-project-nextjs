@@ -68,6 +68,7 @@ export default async function DeleteQuestion(params: { questionId: string }) {
 
 		await session.commitTransaction();
 		revalidatePath(ROUTES.PROFILE(user?.email));
+		revalidatePath(ROUTES.TAGS);
 		return {
 			success: true,
 		};
