@@ -11,7 +11,7 @@ import { QuestionEdit } from "@/lib/actions/QuestionEdit.actions";
 import ROUTES from "@/routes";
 import type { QuestionDetails } from "@/types/question";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 const QuestionForm = ({
@@ -24,11 +24,12 @@ const QuestionForm = ({
 	const [title, setTitle] = useState(question?.title ?? "");
 	const [content, setContent] = useState(question?.content ?? "");
 	const [tags, setTags] = useState<string[]>(
-		question?.tags?.map((tag) => tag.name) ?? []
+		question?.tags?.map((tag) => tag.name) ?? [],
 	);
 	const [newTag, setNewTag] = useState("");
 	const [error, setError] = useState("");
 	const router = useRouter();
+	const [isPending, startTransition] = useTransition();
 
 	const enterPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
@@ -45,39 +46,43 @@ const QuestionForm = ({
 	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		try {
-			if (isEdit && question) {
-				const res = await QuestionEdit({
-					questionId: question._id as string,
+		startTransition(async () => {
+			try {
+				if (isEdit && question) {
+					const res = await QuestionEdit({
+						questionId: question._id as string,
+						title,
+						content,
+						tags,
+					});
+
+					if (res.success) {
+						toast.success("Question updated successfully!");
+						router.push(ROUTES.QUESTION_DETAILS(res.data!._id));
+					}
+					return;
+				}
+
+				const result = await CreateQuestionAction({
 					title,
 					content,
 					tags,
 				});
 
-				if (res.success) {
-					toast.success("Question updated successfully!");
-					router.push(ROUTES.QUESTION_DETAILS(res.data!._id));
+				if (result.success && result.data) {
+					toast.success("Question created successfully!");
+					return router.push(
+						ROUTES.QUESTION_DETAILS(result.data?._id),
+					);
+				} else {
+					toast.error(result.message || "Failed to create question");
 				}
-				return;
+			} catch (err) {
+				if (err instanceof Error) {
+					toast.error(err.message);
+				}
 			}
-
-			const result = await CreateQuestionAction({
-				title,
-				content,
-				tags,
-			});
-
-			if (result.success && result.data) {
-				toast.success("Question created successfully!");
-				return router.push(ROUTES.QUESTION_DETAILS(result.data?._id));
-			} else {
-				toast.error(result.message || "Failed to create question");
-			}
-		} catch (err) {
-			if (err instanceof Error) {
-				toast.error(err.message);
-			}
-		}
+		});
 	};
 
 	const removeTag = (tagToRemove: string) => {
@@ -143,9 +148,16 @@ const QuestionForm = ({
 			</div>
 			<Button
 				type="submit"
+				disabled={isPending}
 				className="w-full bg-gray-500 hover:bg-gray-600 dark:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer"
 			>
-				{isEdit ? "Update" : "Create"}
+				{isPending ? (
+					<span className="flex items-center gap-2">
+						{isEdit ? "Updating..." : "Creating..."}
+					</span>
+				) : (
+					<>{isEdit ? "Update" : "Create"}</>
+				)}
 			</Button>
 		</form>
 	);
