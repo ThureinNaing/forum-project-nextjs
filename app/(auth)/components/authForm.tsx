@@ -6,22 +6,27 @@ import googleLogo from "@/public/google1.png";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import ROUTES from "@/routes";
+import { useTransition } from "react";
 
 const AuthForm = () => {
+	const [isPending, startTransition] = useTransition();
 	const oAuthLogin = async (type: "github" | "google") => {
-		try {
-			await signIn(type, {
-				redirectTo: ROUTES.HOME,
-			});
-		} catch (err) {
-			if (err instanceof Error) {
-				toast.error(err.message);
+		startTransition(async () => {
+			try {
+				await signIn(type, {
+					redirectTo: ROUTES.HOME,
+				});
+			} catch (err) {
+				if (err instanceof Error) {
+					toast.error(err.message);
+				}
 			}
-		}
+		});
 	};
 	return (
 		<div className="flex flex-col md:flex-row items-center justify-between gap-1">
 			<Button
+				disabled={isPending}
 				onClick={() => oAuthLogin("google")}
 				type="button"
 				variant="outline"
@@ -32,6 +37,7 @@ const AuthForm = () => {
 			</Button>
 			<span>or</span>
 			<Button
+				disabled={isPending}
 				onClick={() => oAuthLogin("github")}
 				type="button"
 				variant="outline"
