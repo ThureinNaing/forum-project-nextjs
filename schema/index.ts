@@ -57,3 +57,34 @@ export const registerSchema = z
 		path: ["confirmPassword"], // Highlight the field with the error
 		message: "Passwords do not match",
 	});
+
+export const userProfileSchema = z.object({
+	name: z
+		.string()
+		.min(2, { message: "Name must be at least 2 characters" })
+		.max(50, { message: "Name must be less than 50 characters" }),
+	username: z
+		.string()
+		.min(3, { message: "Username must be at least 3 characters" })
+		.max(30, { message: "Username must be less than 30 characters" })
+		.regex(/^[a-zA-Z0-9_]+$/, {
+			message:
+				"Username can only contain letters, numbers, and underscores",
+		}),
+	email: z
+		.string()
+		.email({ message: "Please provide a valid email address" }),
+	image: z.string().optional(),
+	bio: z
+		.string()
+		.max(160, { message: "Bio must be 160 characters or less" })
+		.optional(),
+	location: z
+		.string()
+		.max(50, { message: "Location must be 50 characters or less" })
+		.optional(),
+	portfolio: z
+		.string()
+		.max(200, { message: "Portfolio URL must be 200 characters or less" })
+		.optional(),
+});

@@ -35,6 +35,9 @@ export const api = {
 				email?: string;
 				username?: string;
 				image?: string;
+				bio?: string;
+				location?: string;
+				portfolio?: string;
 			},
 		) =>
 			fetchHandler(API_URL + `/users/${id}`, {

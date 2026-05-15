@@ -13,6 +13,8 @@ import Link from "next/link";
 import GetUserAction from "@/lib/actions/GetUser.action";
 import { Button } from "./ui/button";
 import StatsCard from "./StatsCard";
+import { DialogBox } from "./DialogBox";
+import UserProfileEdit from "./UserProfileEdit";
 
 const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
 	const users = await GetUserAction({ email: userEmail });
@@ -170,6 +172,13 @@ const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
 								)}
 							</div>
 						</div>
+						<DialogBox
+							triggerLabel="Edit"
+							title="Edit Profile"
+							description="Update your public profile information and let others know more about you."
+						>
+							<UserProfileEdit user={user} />
+						</DialogBox>
 					</div>
 				</CardContent>
 			</Card>
