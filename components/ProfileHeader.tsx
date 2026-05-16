@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Card, CardContent } from "./ui/card";
 import {
 	ArrowLeft,
@@ -16,6 +15,7 @@ import StatsCard from "./StatsCard";
 import { DialogBox } from "./DialogBox";
 import UserProfileEdit from "./UserProfileEdit";
 import { auth } from "@/auth";
+import Image from "next/image";
 
 const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
 	const auth_session = await auth();
@@ -109,12 +109,19 @@ const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
 					<div className="flex flex-col md:flex-row gap-6">
 						{/* Avatar Section */}
 						<div className="flex flex-col items-center md:items-start">
-							<Avatar className="w-32 h-32">
-								<AvatarImage src={user.image} alt={user.name} />
-								<AvatarFallback className="text-2xl size-32">
-									{user.name.charAt(0).toUpperCase()}
-								</AvatarFallback>
-							</Avatar>
+							{user.image ? (
+								<Image
+									src={user.image}
+									alt={user.name}
+									width={36}
+									height={36}
+									className="w-32 h-32"
+								/>
+							) : (
+								<div className="flex h-32 w-32 items-center justify-center rounded-md bg-slate-100 text-3xl font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+									{user.name.charAt(0)?.toUpperCase?.()}
+								</div>
+							)}
 						</div>
 
 						{/* User Info Section */}
