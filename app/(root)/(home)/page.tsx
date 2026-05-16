@@ -35,7 +35,7 @@ export default async function Home({
 	return (
 		<div className="p-5 space-y-5">
 			<div className="flex items-center justify-between">
-				<div className="font-bold text-3xl dark:text-blue-600">
+				<div className="hidden md:block font-bold text-3xl dark:text-blue-600">
 					All Threads
 				</div>
 				<CommonFilters

@@ -21,7 +21,7 @@ const RightSidebar = async () => {
 	} = await GetPopularTags();
 	const { tags = [] } = tagsData || {};
 	return (
-		<div className="space-y-5">
+		<div className="hidden md:block space-y-5 ">
 			<div className="space-y-5">
 				<h1 className="text-xl font-bold">Popular Questions</h1>
 				<div className=" flex items-center space-x-2 ">

@@ -39,7 +39,7 @@ const CommonFilters = ({
 		});
 	};
 	return (
-		<div className="p-5">
+		<div className="md:p-5">
 			<select
 				disabled={isPending}
 				value={currentFilter}
