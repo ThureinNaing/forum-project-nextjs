@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Forum Project (Next.js)
 
-## Getting Started
+A modern forum / Q&A application built with Next.js, Tailwind CSS, Mongoose and NextAuth. It includes question and answer threads, tagging, voting, bookmarks, user profiles, and a rich-text editor. The project also contains AI-assisted features for generating answers.
 
-First, run the development server:
+## Features
+
+- Authentication with NextAuth providers
+- Ask, answer, edit, and delete questions and answers
+- Rich text editor powered by Tiptap
+- Tags, searching, and pagination
+- Voting and bookmarking
+- User profiles and activity pages
+- AI-generated answers (optional integration)
+- Server-side APIs and Mongoose models for MongoDB
+
+## Tech stack
+
+- Next.js (app router)
+- React 19
+- Tailwind CSS
+- Mongoose (MongoDB)
+- NextAuth (authentication)
+- Tiptap (rich text editor)
+- TypeScript
+
+## Quick Start
+
+Prerequisites:
+
+- Node 18+ recommended
+- pnpm (preferred), npm or yarn
+- A MongoDB database (Atlas or self-hosted)
+
+Install dependencies:
 
 ```bash
-npm run dev
+pnpm install
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a local environment file `.env.local` at the project root with the variables below (example):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# MongoDB connection string
+MONGODB_URI=your-mongodb-connection-string
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# NextAuth config
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=replace-with-a-secure-random-value
 
-## Learn More
+# Optional: OAuth provider credentials
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
 
-To learn more about Next.js, take a look at the following resources:
+# Optional: AI provider key for AI-generated answers
+AI_API_KEY=...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run the development server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+# or
+npm run dev
+```
 
-## Deploy on Vercel
+Open http://localhost:3000 in your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Available scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `dev` - run Next.js in development mode
+- `build` - build the production app
+- `start` - start the production server
+- `lint` - run the linter
+
+These are defined in `package.json`.
+
+## Project layout
+
+- `app/` - Next.js app routes and layouts
+- `components/` - React components and UI primitives
+- `lib/` - helpers, API client wrappers, and DB connection (`lib/dbConnect.ts`)
+- `models/` - Mongoose models (User, Question, Answer, Tag, Vote, etc.)
+- `api/` - server actions and API route handlers
+- `types/` - TypeScript types
+
+## Environment and configuration notes
+
+- The app uses Mongoose to connect to MongoDB via `MONGODB_URI`.
+- NextAuth configuration and provider settings are located in the auth files at the project root (e.g. `auth.ts`, `auth.config.ts`).
+- AI features require an API key (set `AI_API_KEY`), and the integration can be found under `lib/actions/GenerateAiAnswer.action.ts`.
+
+## Deployment
+
+This project is compatible with Vercel. For environment variables and build configuration, set the same `.env` variables in your Vercel project settings.
