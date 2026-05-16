@@ -64,7 +64,7 @@ export default async function DeleteQuestion(params: { questionId: string }) {
 			}).session(session);
 		}
 
-		await Question.findByIdAndDelete(questionId).session(session);
+		await Question.deleteOne({ _id: questionId }).session(session);
 
 		await session.commitTransaction();
 		revalidatePath(ROUTES.PROFILE(user?.email));

@@ -33,6 +33,7 @@ export async function GetTags(params: {
 	const limit = Number(pageSize);
 
 	const filterQuery: FilterQuery<typeof Tag> = {};
+	filterQuery.questions = { $gt: 0 }; // remove tag count is zero
 
 	if (search) {
 		//$or for multiple fields
