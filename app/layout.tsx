@@ -10,6 +10,7 @@ import { auth } from "@/auth";
 import ClientToast from "@/components/client-toast";
 import NextTopLoader from "nextjs-toploader";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // const geistSans = Geist({
 // 	variable: "--font-geist-sans",
@@ -50,7 +51,9 @@ export default async function RootLayout({
 						<SidebarProvider defaultOpen={true}>
 							<AppSidebar />
 							<SidebarInset>
-								{children} <Analytics />
+								{children}
+								<Analytics />
+								<SpeedInsights />
 							</SidebarInset>
 							<ClientToast />
 						</SidebarProvider>
