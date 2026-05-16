@@ -6,11 +6,9 @@ import Link from "next/link";
 import { GetAllQuestions } from "@/lib/actions/GetAllQuestions.actions";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilters from "@/components/CommonFilters";
-import {
-	DefaultFilters,
-	HomePageFilters,
-} from "../../constants/filter.constant";
+
 import Pagination from "@/components/Pagination";
+import { DefaultFilters, HomePageFilters } from "@/constants/filter.constant";
 
 export default async function Home({
 	searchParams,
