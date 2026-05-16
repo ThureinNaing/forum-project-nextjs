@@ -15,8 +15,10 @@ import { Button } from "./ui/button";
 import StatsCard from "./StatsCard";
 import { DialogBox } from "./DialogBox";
 import UserProfileEdit from "./UserProfileEdit";
+import { auth } from "@/auth";
 
 const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
+	const auth_session = await auth();
 	const users = await GetUserAction({ email: userEmail });
 
 	if (!users.success || !users.data) {
@@ -172,13 +174,15 @@ const ProfileHeader = async ({ userEmail }: { userEmail: string }) => {
 								)}
 							</div>
 						</div>
-						<DialogBox
-							triggerLabel="Edit"
-							title="Edit Profile"
-							description="Update your public profile information and let others know more about you."
-						>
-							<UserProfileEdit user={user} />
-						</DialogBox>
+						{auth_session?.user?.email === userEmail && (
+							<DialogBox
+								triggerLabel="Edit"
+								title="Edit Profile"
+								description="Update your public profile information and let others know more about you."
+							>
+								<UserProfileEdit user={user} />
+							</DialogBox>
+						)}
 					</div>
 				</CardContent>
 			</Card>

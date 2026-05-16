@@ -18,6 +18,7 @@ import { api } from "@/lib/api";
 import { userProfileSchema } from "@/schema";
 import { z } from "zod";
 import { IUserDocument } from "@/models/user.model";
+import { UserSchema } from "@/lib/Schema/UserSchema";
 
 export type UserProfileEditFormValues = z.infer<typeof userProfileSchema>;
 
@@ -32,10 +33,10 @@ const UserProfileEdit = ({ user, onSuccess }: UserProfileEditProps) => {
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
-	const form = useForm<UserProfileEditFormValues>({
-		resolver: zodResolver(userProfileSchema),
+	const form = useForm<z.infer<typeof UserSchema>>({
+		resolver: zodResolver(UserSchema),
 		defaultValues: {
-			name: user?.name ?? "haha",
+			name: user?.name ?? "",
 			username: user?.username ?? "",
 			email: user?.email ?? "",
 			image: user?.image ?? "",
@@ -45,12 +46,15 @@ const UserProfileEdit = ({ user, onSuccess }: UserProfileEditProps) => {
 		},
 	});
 
-	async function onSubmit(values: UserProfileEditFormValues) {
+	async function onSubmit(values: z.infer<typeof UserSchema>) {
 		setError(null);
 		setSuccess(null);
 
 		startTransition(async () => {
-			const response = await api.users.update(user!.email, values);
+			const response = await api.users.update(
+				user!._id.toString(),
+				values,
+			);
 
 			if (response?.success) {
 				setSuccess("Profile updated successfully.");
