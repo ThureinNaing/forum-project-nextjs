@@ -35,8 +35,9 @@ const AnswerForm = ({
 			});
 
 			if (success && data) {
-				const { answer = "" } = data || {};
-				setContent(answer);
+				let { answer = "" } = data || {};
+				answer = answer.replace(/<think>[\s\S]*?<\/think>/g, ""); // remove think tag
+				setContent(answer.trim());
 			} else {
 				toast.error(message);
 			}

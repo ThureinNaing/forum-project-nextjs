@@ -2,24 +2,17 @@
 
 import * as React from "react";
 import {
-	AudioWaveform,
 	BookmarkCheck,
 	BookOpen,
-	Command,
-	GalleryVerticalEnd,
 	Globe,
 	HomeIcon,
 	MessageCircleCodeIcon,
-	// NewspaperIcon,
 	TagIcon,
 } from "lucide-react";
-
-import { NavUser } from "@/components/nav-user";
 
 import {
 	Sidebar,
 	SidebarContent,
-	SidebarFooter,
 	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
@@ -28,43 +21,16 @@ import {
 } from "@/components/ui/sidebar";
 import ROUTES from "@/routes";
 import Link from "next/link";
-import { FaQuestionCircle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
-
-// This is sample data.
-const data = {
-	user: {
-		name: "Tom Cook",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
-	teams: [
-		{
-			name: "Forum",
-			logo: GalleryVerticalEnd,
-			plan: "Enterprise",
-		},
-		{
-			name: "Acme Corp.",
-			logo: AudioWaveform,
-			plan: "Startup",
-		},
-		{
-			name: "Evil Corp.",
-			logo: Command,
-			plan: "Free",
-		},
-	],
-};
 
 const navLinks = [
 	{ name: "Home", url: ROUTES.HOME, icon: HomeIcon },
 	{ name: "Tags", url: ROUTES.TAGS, icon: TagIcon },
-	{
-		name: "Popular Questions",
-		url: ROUTES.QUESTIONS,
-		icon: FaQuestionCircle,
-	},
+	// {
+	// 	name: "Popular Questions",
+	// 	url: ROUTES.QUESTIONS,
+	// 	icon: FaQuestionCircle,
+	// },
 	{
 		name: "Ask a new question",
 		url: ROUTES.QUESTION_CREATE,
@@ -117,9 +83,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					))}
 				</SidebarMenu>
 			</SidebarContent>
-			<SidebarFooter>
-				<NavUser user={data.user} />
-			</SidebarFooter>
+
 			<SidebarRail />
 		</Sidebar>
 	);
