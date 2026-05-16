@@ -9,6 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import ClientToast from "@/components/client-toast";
 import NextTopLoader from "nextjs-toploader";
+import { Analytics } from "@vercel/analytics/next";
 
 // const geistSans = Geist({
 // 	variable: "--font-geist-sans",
@@ -48,7 +49,9 @@ export default async function RootLayout({
 					<SessionProvider session={session}>
 						<SidebarProvider defaultOpen={true}>
 							<AppSidebar />
-							<SidebarInset>{children}</SidebarInset>
+							<SidebarInset>
+								{children} <Analytics />
+							</SidebarInset>
 							<ClientToast />
 						</SidebarProvider>
 					</SessionProvider>
