@@ -18,7 +18,7 @@ import Link from "next/link";
 import AuthForm from "../components/authForm";
 import ROUTES from "@/routes";
 import { signInWithCredentials } from "@/lib/actions/SignInWithCredentials.actions";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { useSession } from "next-auth/react";
 import { FaSpinner } from "react-icons/fa";
 

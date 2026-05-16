@@ -2,7 +2,7 @@
 
 import queryString from "query-string";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 
 const Pagination = ({
 	isNext,

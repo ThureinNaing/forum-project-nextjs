@@ -10,7 +10,7 @@ import { QuestionEdit } from "@/lib/actions/QuestionEdit.actions";
 
 import ROUTES from "@/routes";
 import type { QuestionDetails } from "@/types/question";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 

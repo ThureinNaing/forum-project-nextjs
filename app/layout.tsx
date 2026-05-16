@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import ClientToast from "@/components/client-toast";
+import NextTopLoader from "nextjs-toploader";
 
 // const geistSans = Geist({
 // 	variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default async function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			> */}
 			<body className={` antialiased`} cz-shortcut-listen="true">
+				<NextTopLoader />
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"

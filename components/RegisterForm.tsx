@@ -20,7 +20,7 @@ import Link from "next/link";
 import ROUTES from "@/routes";
 import AuthForm from "@/app/(auth)/components/authForm";
 import { signUpWithCredentials } from "@/lib/actions/SignUpWithCredetntials.actions";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { FaSpinner } from "react-icons/fa";
 
 const RegisterForm = () => {
